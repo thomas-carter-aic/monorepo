@@ -1,0 +1,15 @@
+# Third-Party Notices
+
+This project includes dependencies licensed under open source licenses.
+
+Notable third-party packages:
+
+- React (MIT)
+- Express (MIT)
+- Vite (MIT)
+- TypeScript (Apache-2.0)
+
+Each dependency's license can be found in its respective package repository or `node_modules/`.
+
+For full dependency licensing, see the output of:
+`pnpm licenses list`

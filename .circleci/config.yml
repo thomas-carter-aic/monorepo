@@ -1,0 +1,63 @@
+version: 2.1
+
+executors:
+  node:
+    docker:
+      - image: cimg/node:18.17
+    working_directory: ~/project
+
+commands:
+  install-deps:
+    steps:
+      - run:
+          name: Install dependencies with pnpm
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest --activate
+            pnpm install --frozen-lockfile
+
+jobs:
+  lint:
+    executor: node
+    steps:
+      - checkout
+      - install-deps
+      - run: pnpm lint
+
+  typecheck:
+    executor: node
+    steps:
+      - checkout
+      - install-deps
+      - run: pnpm run typecheck
+
+  test:
+    executor: node
+    steps:
+      - checkout
+      - install-deps
+      - run: pnpm run test
+
+  build:
+    executor: node
+    steps:
+      - checkout
+      - install-deps
+      - run: pnpm run build
+
+  changeset-status:
+    executor: node
+    steps:
+      - checkout
+      - install-deps
+      - run: pnpm changeset status --since=origin/main
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - lint
+      - typecheck
+      - test
+      - build
+      - changeset-status

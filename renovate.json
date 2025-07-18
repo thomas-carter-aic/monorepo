@@ -1,0 +1,52 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":dependencyDashboard",
+    ":group:monorepoPackages",
+    ":label(dependencies)",
+    ":preserveSemverRanges",
+    ":timezone(Etc/UTC)"
+  ],
+  "enabledManagers": ["pnpm"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "Types"
+    },
+    {
+      "matchPackagePatterns": ["^eslint", "^@eslint", "^prettier"],
+      "groupName": "Linting and Formatting"
+    },
+    {
+      "matchPackagePatterns": ["^react", "^react-dom"],
+      "groupName": "React Ecosystem"
+    },
+    {
+      "matchPackagePatterns": ["^typescript", "^tslib"],
+      "groupName": "TypeScript Core"
+    },
+    {
+      "matchPackagePatterns": ["^jest", "^@testing-library", "^vitest"],
+      "groupName": "Testing Frameworks"
+    },
+    {
+      "matchPackagePatterns": ["^turbo", "^nx", "^@nrwl"],
+      "groupName": "Monorepo Tooling"
+    }
+  ],
+  "schedule": ["after 2am and before 6am on every weekday"],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "📌 Dependency Update Dashboard",
+  "ignorePaths": [
+    "**/dist/**",
+    "**/.turbo/**",
+    "**/build/**",
+    "**/coverage/**"
+  ],
+  "rebaseWhen": "behind-base-branch",
+  "prConcurrentLimit": 5,
+  "semanticCommits": true,
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps"
+}

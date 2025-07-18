@@ -1,0 +1,8 @@
+packages:
+  - 'apps/*'
+  - 'apps/*/*'          # For nested apps like apps/api/graphql, apps/api/rest
+  - 'packages/*'
+  - 'tools/*'
+  - 'config/**'         # For shared config (if you publish any as packages)
+  - 'devex/**'          # For examples, prototypes
+  - 'tests/**'          # For benchmarks, mocks, e2e, etc.
