@@ -1,0 +1,57 @@
+filename: events.md
+path: docs/architecture/events.md
+title: Event Design Principles
+headings:
+- '## General Guidelines:'
+- '## Structure'
+- '## Versioning'
+- '## Event Categories'
+- '## Examples'
+- '## Registration'
+content:
+- ''
+- ''
+- '- "Events are named in past tense using <Entity><VerbPastTense> format."'
+- '- "Events should be factual, observable, and reflect a domain concept."'
+- '- "Events are immutable."'
+- '- "Use Zod for schema validation."'
+- ''
+- ''
+- // Example
+- '```'
+- export const ModelCreated = z.object({
+- 'modelId: z.string().uuid(),'
+- 'createdBy: z.string().email(),'
+- 'timestamp: z.string().datetime(),'
+- '});'
+- ''
+- export type ModelCreated = z.infer<typeof ModelCreated>;
+- '```'
+- ''
+- ''
+- '- Events are stored in versioned folders: v1/, v2/, etc.'
+- '- Major version changes (breaking) require new folders.'
+- ''
+- ''
+- "Category\t\tDescription"
+- ''
+- "Domain Events\t\tCore changes in business state (e.g. ClientOnboarded, InvoicePaid)"
+- "Integration Events\tExternal system notifications or sync points (e.g. ZendeskTicketSynced)"
+- "Lifecycle Events\tInternal process and audit events (e.g. SagaCompleted, ProjectionRefreshed)"
+- ''
+- '```'
+- // domain-events/billing/v1/InvoiceGenerated.ts
+- export const InvoiceGenerated = z.object({
+- 'invoiceId: z.string(),'
+- 'tenantId: z.string(),'
+- 'amount: z.number(),'
+- 'issuedAt: z.string()'
+- '});'
+- ''
+- export type InvoiceGenerated = z.infer<typeof InvoiceGenerated>;
+- '```'
+- ''
+- ''
+- ''
+- '- All events are exported through packages/domain-events/index.ts'
+- '- CLI auto-updates this index'

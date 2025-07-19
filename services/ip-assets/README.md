@@ -1,0 +1,3 @@
+# ip-assets
+
+Domain service.

@@ -1,0 +1,122 @@
+filename: context-maps.md
+path: docs/requirements/context-maps.md
+title: Context Maps for AIC AI Platform
+headings:
+- '## 1. Purpose'
+- '## 2. Bounded Context Relationships'
+- '### Context Relationship Matrix'
+- '## 3. Strategic Relationship Types'
+- "### \U0001F501 Shared Kernel"
+- "### \U0001F504 Customer/Supplier"
+- "### \u26D3 Conformist"
+- "### \U0001F501 Open Host Service"
+- "### \U0001F6A7 Anticorruption Layer (ACL)"
+- '## 4. Integration Styles'
+- '## 5. Diagram (To Be Added)'
+- '## 6. Versioning Strategy'
+- '## 7. Maintenance'
+content:
+- ''
+- This document visualizes and describes the relationships, boundaries, and integration
+  styles between bounded contexts in the AIC AI Platform using Domain-Driven Design
+  (DDD) strategic patterns.
+- ''
+- '---'
+- ''
+- ''
+- To clarify how each bounded context (e.g., Auth, Clients, Billing, Projects) interacts
+  within the platform, enabling informed decisions around autonomy, integration, and
+  evolution.
+- ''
+- '---'
+- ''
+- ''
+- The platform is composed of several core domains and supporting subdomains. Each
+  is designed as an independent context with clear ownership, and they interact through
+  events and APIs.
+- ''
+- ''
+- '| Upstream Context     | Downstream Context      | Relationship Type        | Integration
+  Method         |'
+- '|----------------------|-------------------------|---------------------------|-----------------------------|'
+- '| **Auth**             | All contexts            | Shared Kernel             |
+  Library, Auth tokens        |'
+- '| **Clients**          | Billing, Projects       | Customer/Supplier         |
+  REST API, Events            |'
+- '| **Billing**          | Auth, Clients           | Conformist                |
+  Event-Driven, Contracts     |'
+- '| **AI Workspace**     | Projects, Models        | Customer/Supplier         |
+  Event Bus, CQRS             |'
+- '| **Projects**         | Templates, Models       | Open Host Service         |
+  Commands, Queries           |'
+- '| **Marketplace**      | AI Workspace, Vendors   | Anticorruption Layer      |
+  Mapping Layer               |'
+- '| **Support**          | Clients, Auth           | Conformist                |
+  REST API                    |'
+- '| **Investor Relations**| Finance, Billing       | Customer/Supplier         |
+  Reports, Read Projections   |'
+- ''
+- '---'
+- ''
+- ''
+- '- **Contexts**: `auth`, `domain-events`, `permissions`'
+- '- **Pattern**: Shared codebases (e.g., session validation, JWT parsing, roles)'
+- ''
+- '- **Example**: `clients` supplies onboarding events to `billing` and `projects`'
+- '- **Contract**: Explicit event schemas + versioned interfaces'
+- ''
+- '- **Example**: `support` conforms to `clients` schema for tickets'
+- '- **Risk**: Tight coupling; mitigated with strong schema versioning'
+- ''
+- '- **Example**: `projects` exposes service methods for `templates`'
+- '- **Contract**: Open API endpoints with schema validation (e.g., Zod)'
+- ''
+- '- **Example**: `marketplace` integrates with `ai-workspace` via adapter'
+- '- **Goal**: Prevent leaking internal abstractions or data shapes'
+- ''
+- '---'
+- ''
+- ''
+- '| Style               | Used By               | Transport     | Notes                               |'
+- '|--------------------|-----------------------|---------------|-------------------------------------|'
+- '| Event-Driven       | `billing`, `support`  | NATS, Kafka   | Async, loose coupling               |'
+- '| REST API           | `clients`, `support`  | HTTPS         | Authenticated via
+  bearer tokens     |'
+- '| GraphQL Federation | `developer-portal`    | GraphQL       | Composition of APIs
+  from services   |'
+- '| RPC (future)       | TBD                   | gRPC/JSON-RPC | Only if ultra-perf
+  is needed        |'
+- '| Shared Libraries   | `auth`, `utils`       | Local import  | Used for validation
+  and permissions |'
+- ''
+- '---'
+- ''
+- ''
+- '_TODO_: Add visual context map diagram at `docs/architecture/diagrams/context-map.png`.'
+- ''
+- '- Colored domains (core, supporting, generic)'
+- '- Arrows indicating relationship direction and style'
+- '- Legends for relationship types'
+- ''
+- '---'
+- ''
+- ''
+- '- All service and event interfaces are versioned (v1, v2 folders)'
+- '- Context map is updated when:'
+- '- A service introduces a new API or event stream'
+- '- An integration style changes'
+- '- A bounded context is refactored or merged'
+- ''
+- '---'
+- ''
+- ''
+- '- Each service owns its side of the interface definition.'
+- '- Coordination required for upstream breaking changes.'
+- '- The CLI tooling (`tools/cli`) ensures registration of events, versioning, and
+  interface exposure.'
+- '- Integration tests validate downstream contract adherence.'
+- ''
+- '---'
+- ''
+- Would you like the diagram scaffolded or a visual example of the context map created
+  next?

@@ -1,0 +1,33 @@
+{
+  "filename": "index.md",
+  "path": "docs/requirements/index.md",
+  "title": "Software Documentation Index",
+  "headings": [
+    "## \ud83e\uddfe Core Requirements",
+    "## \ud83e\uddf1 Architecture",
+    "## \ud83d\udd10 Security",
+    "## \ud83d\udee0 DevOps",
+    "## \ud83d\udd04 Lifecycle",
+    "## \ud83d\udcda Engineering Practice"
+  ],
+  "content": [
+    "",
+    "- [Software Requirements Document](./software-requirements-document.md)",
+    "",
+    "- [Architecture Principles](./architecture-principles.md)",
+    "- [Bounded Contexts](../architecture/bounded-contexts.md)",
+    "- [Domain Events](../architecture/events.md)",
+    "- [Ubiquitous Language](../architecture/ubiquitous-language.md)",
+    "- [Context Maps](../architecture/context-maps.md)",
+    "- [Sagas](../architecture/sagas.md)",
+    "",
+    "- [Security Guidelines](./security.md)",
+    "",
+    "- [DevOps & Infrastructure](./devops.md)",
+    "",
+    "- [SDLC Process](./sdlc-process.md)",
+    "",
+    "- [Coding Guidelines](./coding-guidelines.md)",
+    "- [Integration Policy](./integration-policy.md)"
+  ]
+}

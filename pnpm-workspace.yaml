@@ -1,8 +1,48 @@
 packages:
-  - 'apps/*'
-  - 'apps/*/*'          # For nested apps like apps/api/graphql, apps/api/rest
-  - 'packages/*'
-  - 'tools/*'
-  - 'config/**'         # For shared config (if you publish any as packages)
-  - 'devex/**'          # For examples, prototypes
-  - 'tests/**'          # For benchmarks, mocks, e2e, etc.
+  - apps/*
+  - apps/*/*
+  - packages/*
+  - tools/*
+  - config/**
+  - devex/**
+  - tests/**
+  - apps/admin
+  - apps/api
+  - apps/cli
+  - apps/docs
+  - apps/mobile
+  - apps/web
+  - apps/worker
+  - packages/api-client
+  - packages/auth
+  - packages/config
+  - packages/hooks
+  - packages/ui
+  - packages/utils
+  - apps/client-dashboard
+  - apps/developer-portal
+  - apps/employee-portal
+  - apps/investor-portal
+  - apps/marketing-site
+  - apps/support-portal
+  - services/ai-workspace
+  - services/engagements
+  - services/auth
+  - services/billing
+  - services/marketplace
+  - services/templates
+  - services/notifications
+  - services/investor-relations
+  - services/ip-assets
+  - services/enablement
+  - services/clients
+  - services/support
+  - services/projects
+  - services/solutions
+  - services/tenancy
+  - services/devtools
+  - services/assessments
+  - packages/auth-client
+  - packages/design-system
+  - packages/domain-events
+  - packages/event-bus

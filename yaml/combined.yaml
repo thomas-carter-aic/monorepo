@@ -1,0 +1,2731 @@
+- filename: glossary.md
+  path: docs/glossary.md
+  title: null
+  headings: []
+  content: []
+- filename: styleguide.md
+  path: docs/styleguide.md
+  title: null
+  headings: []
+  content: []
+- filename: ubiquitous-language.md
+  path: docs/ubiquitous-language.md
+  title: null
+  headings: []
+  content: []
+- filename: desc.md
+  path: docs/design/desc.md
+  title: null
+  headings:
+  - "## \U0001F9E0 Step 1: Identify Core Capability Domains by Perspective"
+  - "### \U0001F9D1\u200D\U0001F4BC Internal Users"
+  - "### \U0001F465 External Users"
+  - "### \U0001F4E3 Marketing Site"
+  - "## \U0001F9ED Step 2: Group Capabilities into Core, Supporting, Generic Domains"
+  - "## \U0001F4C1 Step 3: Monorepo Structure Recommendation (Top Level)"
+  - "## \U0001F504 Step 4: Design the Cross-Cutting Architecture"
+  - "### \U0001F3D7 Shared Core Infrastructure"
+  - "## \U0001F9E9 Step 5: Define Domain Events for Communication"
+  - "## \U0001F4DC Step 6: Establish Ubiquitous Language"
+  - "## \U0001F510 Step 7: Define Roles and Access Policies"
+  - "## \u2705 Summary: What You Should Do Now"
+  - '## 1. Executive Overview'
+  - '## 2. Strategic Goals'
+  - '## 3. Multi-Tenant & Multi-Role System Design'
+  - '### 3.1 User Roles'
+  - '### 3.2 Portal Architecture'
+  - '## 4. Core Domains & Capability Map'
+  - '### 4.1 Core Domains'
+  - '### 4.2 Supporting Domains'
+  - '### 4.3 Generic Domains'
+  - '## 5. Architecture Foundations'
+  - '## 6. Monorepo Structure'
+  - '## 7. Ubiquitous Language (Sample)'
+  - '## 8. Security and Access'
+  - '## 9. Observability'
+  - '## 10. Extensibility & Developer Ecosystem'
+  - '## 11. Next Steps'
+  - '## 12. Appendix'
+  content:
+  - the system is being designed with multiple user-types in mind.
+  - 'Admin: there will be an admin (myself) which will administer the entire system,'
+  - Consultant users will be my employees,
+  - Client users will be individuals that work for my clients who will be  using the
+    AI PaaS platform on behalf of my clients,
+  - Developer users will be my own internal developers and developers working for
+    my clients or developers my clients have hired and/or third party developers,
+  - Vendor users who will be managing their own applications, extensions, integrations,
+    etc. in our marketplace,
+  - Support personnel who work for me,
+  - possibly some others user types
+  - There will be a business/corporate/marketing site which I will use for establishing
+    the web presence for my consulting company as well as marketing our AI PaaS and
+    other SaaS products.
+  - There will be an employee portal.
+  - There will be an admin portal and dashboard for administrating the system.
+  - There will be an investor portal with a virtual data room.
+  - There will be a support portal for support, helpdesk, knowledge base, ticketing,
+    etc.
+  - There will be a developer portal with developer specific information
+  - Each client will have their own dashboards, profiles, and abilities to use the
+    AI PaaS and other SaaS products they subscribe to
+  - Thus, I need to determine the core capabilities for all these areas. There will
+    be internal microservices that apply to the system as a whole. There will be client
+    facing microservices. There may be some shared/common microservices.
+  - How should/could we best approach this
+  - ''
+  - ''
+  - ''
+  - "Designing a system like this \u2014 with **multi-tenant, multi-role, multi-portal\
+    \ complexity** \u2014 calls for a structured and layered approach to defining\
+    \ your **core capabilities**, **bounded contexts**, and **services**. Below is\
+    \ a plan that combines **DDD**, **MACH principles**, and **platform product thinking**\
+    \ to guide you from concept to architecture."
+  - ''
+  - '---'
+  - ''
+  - ''
+  - "Let\u2019s deconstruct by **user type and portal** to reveal underlying capabilities.\
+    \ These are your **bounded contexts** or domain services."
+  - ''
+  - ''
+  - '| Portal / Role    | Capabilities                                                         |
+    Domain Context                                 |'
+  - '| ---------------- | --------------------------------------------------------------------
+    | ---------------------------------------------- |'
+  - '| Admin Portal     | Tenant management, system config, app visibility, user impersonation
+    | `admin`, `tenancy`, `users`, `audit`           |'
+  - '| Employee Portal  | Task management, project visibility, internal comms                  |
+    `projects`, `internal-tools`, `communications` |'
+  - '| Support Portal   | Helpdesk, ticketing, knowledge base, live chat                       |
+    `support`, `tickets`, `kb`, `messaging`        |'
+  - '| Developer Portal | App registration, API keys, docs, SDKs, sandbox                      |
+    `devtools`, `marketplace`, `auth`, `telemetry` |'
+  - ''
+  - ''
+  - '| Role              | Capabilities                                                 |
+    Domain Context                                         |'
+  - '| ----------------- | ------------------------------------------------------------
+    | ------------------------------------------------------ |'
+  - '| Client Users      | AI workspace, model execution, dashboards, billing, settings
+    | `clients`, `workspace`, `billing`, `models`, `data`    |'
+  - '| Client Developers | Integration setup, access tokens, API docs                   |
+    `devtools`, `auth`, `events`, `integrations`           |'
+  - '| Vendors           | App submissions, analytics, support inbox, API monetization  |
+    `marketplace`, `apps`, `vendor-portal`, `analytics`    |'
+  - '| Investors         | Access to financials, reports, VDR, investor communications  |
+    `investor-relations`, `vdr`, `legal-docs`, `analytics` |'
+  - ''
+  - ''
+  - '* Lead generation'
+  - '* Blog, updates'
+  - '* Product landing pages'
+  - '* Forms & newsletter subscriptions'
+  - ''
+  - 'Context: `marketing`, `web`, `cms`, `seo`, `leads`'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Type           | Capabilities                                                                 |'
+  - '| -------------- | ----------------------------------------------------------------------------
+    |'
+  - '| **Core**       | AI Workspace, Model Management, Client Dashboards, Templates,
+    Data Ingestion |'
+  - '| **Supporting** | Marketplace, App Registry, Billing, Integrations, User Identity              |'
+  - '| **Generic**    | Auth, Audit Logs, Webhooks, Email Delivery, Tenant Billing,
+    Role Management  |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '```'
+  - apps/
+  - "\u251C\u2500\u2500 marketing-site/"
+  - "\u251C\u2500\u2500 admin-portal/"
+  - "\u251C\u2500\u2500 employee-portal/"
+  - "\u251C\u2500\u2500 support-portal/"
+  - "\u251C\u2500\u2500 developer-portal/"
+  - "\u251C\u2500\u2500 investor-portal/"
+  - "\u251C\u2500\u2500 client-dashboards/"
+  - services/
+  - "\u251C\u2500\u2500 ai-workspace/              # Model runs, pipelines, output\
+    \ views"
+  - "\u251C\u2500\u2500 auth/                      # Centralized identity & role mgmt"
+  - "\u251C\u2500\u2500 billing/                   # Invoicing, usage tracking, plans"
+  - "\u251C\u2500\u2500 clients/                   # Organizations, access control"
+  - "\u251C\u2500\u2500 support/                   # Tickets, agents, status"
+  - "\u251C\u2500\u2500 devtools/                  # APIs, keys, webhooks, logs"
+  - "\u251C\u2500\u2500 marketplace/               # App listings, vendor analytics"
+  - "\u251C\u2500\u2500 templates/                 # Prompt + workflow templates"
+  - "\u251C\u2500\u2500 projects/                  # Internal project mgmt (consulting)"
+  - "\u251C\u2500\u2500 investor-relations/        # VDR, investor-specific access"
+  - "\u251C\u2500\u2500 analytics/                 # Usage, business KPIs, dashboards"
+  - "\u251C\u2500\u2500 tenancy/                   # Tenant onboarding + provisioning"
+  - packages/
+  - "\u251C\u2500\u2500 ui/"
+  - "\u251C\u2500\u2500 auth-client/"
+  - "\u251C\u2500\u2500 event-bus/"
+  - "\u251C\u2500\u2500 design-system/"
+  - "\u251C\u2500\u2500 utils/"
+  - "\u251C\u2500\u2500 api-clients/"
+  - config/
+  - docs/
+  - '```'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '| Capability      | Domain / Tooling                             |'
+  - '| --------------- | -------------------------------------------- |'
+  - '| Multi-tenancy   | `tenancy/`, `clients/`                       |'
+  - '| AuthN/AuthZ     | Centralized auth service (OIDC/SAML support) |'
+  - '| Event Bus       | Kafka / NATS / Redis Streams                 |'
+  - '| Event Store     | PostgreSQL w/ outbox or EventStoreDB         |'
+  - '| CI/CD & Secrets | Terraform + Vault + ArgoCD or CircleCI       |'
+  - '| Observability   | Logging, tracing, metrics                    |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'Establish a common domain event spec:'
+  - ''
+  - '```json'
+  - '{'
+  - '"type": "UserInvited",'
+  - '"context": "clients",'
+  - '"tenantId": "acme",'
+  - '"payload": {'
+  - '"email": "john@example.com",'
+  - '"role": "developer"'
+  - '},'
+  - '"metadata": {'
+  - '"correlationId": "...",'
+  - '"timestamp": "...",'
+  - '"source": "admin-portal"'
+  - '}'
+  - '}'
+  - '```'
+  - ''
+  - 'Used for:'
+  - ''
+  - '* CQRS projections'
+  - '* Sagas (orchestration)'
+  - '* Audit logging'
+  - '* Triggers and workflows'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'Document a `docs/ubiquitous-language.md`:'
+  - ''
+  - "* \u201CWorkspace\u201D = client's AI environment"
+  - "* \u201CExecution\u201D = run of a model or pipeline"
+  - "* \u201CIntegration\u201D = third-party service connected to a client"
+  - "* \u201CTemplate\u201D = reusable AI use case blueprint"
+  - ''
+  - Make sure your model, services, and UI reflect this language.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'Create a `services/auth/roles.ts` or RBAC model:'
+  - ''
+  - '```ts'
+  - // user-roles.ts
+  - export const Roles = {
+  - 'Admin: ''admin'','
+  - 'Consultant: ''consultant'','
+  - 'ClientUser: ''client_user'','
+  - 'Developer: ''developer'','
+  - 'Vendor: ''vendor'','
+  - 'Support: ''support'','
+  - 'Investor: ''investor'''
+  - '};'
+  - '```'
+  - ''
+  - 'Use policies like:'
+  - ''
+  - '* `canImpersonateUser()`'
+  - '* `canSubmitApp()`'
+  - '* `canViewModelOutputs()`'
+  - ''
+  - And assign **scopes** or **tenants** to those roles for fine-grained access.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Action                                         | Outcome                                          |'
+  - '| ---------------------------------------------- | ------------------------------------------------
+    |'
+  - "| Map all users \u2192 capabilities \u2192 contexts        | Your domain model\
+    \ & service map                  |"
+  - '| Scaffold services/portals using consistent DDD | Start clean & structured                         |'
+  - '| Use shared packages for eventing, auth, UI     | Enforce DRY & reusability                        |'
+  - '| Codify roles and access levels                 | Secure & isolated experiences
+    for each user type |'
+  - '| Define event schema, setup event bus           | Enables event-driven, observable
+    architecture    |'
+  - '| Document all domain terms & flows              | Ensures shared understanding
+    across your org     |'
+  - ''
+  - '---'
+  - ''
+  - 'Would you like me to generate:'
+  - ''
+  - '* A domain map markdown table?'
+  - '* A scaffolding script for all user types and services?'
+  - '* Role-based access model + policy definitions?'
+  - ''
+  - "Let\u2019s make this real and codified in your monorepo."
+  - ''
+  - ''
+  - ''
+  - '**Title: Domain-Driven Platform Architecture for Multi-Tenant AI Consulting &
+    PaaS Business**'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - This document defines the strategic and technical blueprint for a consulting company
+    that provides AI consulting, enablement, and transformation to SMB and enterprise
+    clients. It also operates a multi-tenant AI PaaS and SaaS product suite. The system
+    supports diverse user types and use cases across internal and external domains.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* Deliver modular, scalable AI consulting services.'
+  - '* Operate a robust, secure AI PaaS platform for external clients.'
+  - '* Support a rich ecosystem of internal users, external clients, developers, and
+    vendors.'
+  - '* Establish a unified architecture that enforces DDD, clean/hexagonal architecture,
+    CQRS, event sourcing, and MACH principles.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '| Role            | Description                                                                       |'
+  - '| --------------- | ---------------------------------------------------------------------------------
+    |'
+  - '| **Admin**       | Global system administrator with full privileges across all
+    contexts.             |'
+  - '| **Consultant**  | Internal consultants responsible for client delivery and
+    transformation projects. |'
+  - '| **Client User** | Individual working for a client who uses the AI PaaS platform.                    |'
+  - '| **Developer**   | Internal developers or external developers hired by clients.                      |'
+  - '| **Vendor**      | Third-party or partner developer who publishes apps, integrations,
+    or extensions. |'
+  - '| **Support**     | Internal support and success personnel.                                           |'
+  - '| **Investor**    | Read-only portal access to KPIs, financials, and VDR.                             |'
+  - ''
+  - ''
+  - '| Portal                | Purpose                                                                 |'
+  - '| --------------------- | -----------------------------------------------------------------------
+    |'
+  - '| **Admin Portal**      | Platform administration, tenant management, impersonation
+    tools.        |'
+  - '| **Employee Portal**   | Consultants'' internal tools and dashboards.                             |'
+  - '| **Client Dashboards** | Client workspace to run AI models, access usage stats,
+    team management. |'
+  - '| **Developer Portal**  | API registration, sandbox environment, webhook & telemetry
+    inspection.  |'
+  - '| **Vendor Portal**     | Manage marketplace listings, analytics, support tickets.                |'
+  - '| **Investor Portal**   | View financials, download reports, access VDR.                          |'
+  - '| **Support Portal**    | Ticketing, live chat, knowledge base management.                        |'
+  - '| **Marketing Site**    | Corporate website, blog, lead capture.                                  |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '| Domain           | Description                                               |'
+  - '| ---------------- | ---------------------------------------------------------
+    |'
+  - '| **AI Workspace** | Clients run, manage, and collaborate on AI models.        |'
+  - '| **Solutions**    | Model delivery, lifecycle, retraining, evaluation.        |'
+  - '| **Templates**    | Modular, reusable patterns for AI use cases.              |'
+  - '| **IP Assets**    | Internal reusable assets, frameworks, and best practices.
+    |'
+  - '| **Engagements**  | Consultant-client projects and scopes.                    |'
+  - '| **Projects**     | Internal delivery timelines, SOW execution.               |'
+  - ''
+  - ''
+  - '| Domain                 | Description                                       |'
+  - '| ---------------------- | -------------------------------------------------
+    |'
+  - '| **Enablement**         | Client dashboards, onboarding flows, diagnostics.
+    |'
+  - '| **DevTools**           | API clients, key management, usage logs.          |'
+  - '| **Support**            | Tickets, SLAs, workflows, knowledge base.         |'
+  - '| **Marketplace**        | Vendor and client integrations, app publishing.   |'
+  - '| **Assessments**        | Data maturity, AI readiness evaluations.          |'
+  - '| **Investor Relations** | Investor tools, reports, permissions.             |'
+  - ''
+  - ''
+  - '| Domain            | Description                                 |'
+  - '| ----------------- | ------------------------------------------- |'
+  - '| **Auth**          | Identity, role, policy, tenant access.      |'
+  - '| **Billing**       | Usage tracking, invoicing, plan management. |'
+  - '| **Notifications** | Event-driven alerting system.               |'
+  - '| **Analytics**     | Cross-system usage, KPIs, audit logs.       |'
+  - '| **Tenancy**       | Org provisioning, tenant boundaries.        |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* **Clean/Hexagonal Architecture**: Internal domain logic is decoupled from I/O
+    concerns.'
+  - '* **CQRS**: Split read models (dashboards, logs, analytics) from write models
+    (commands, mutations).'
+  - '* **Event Sourcing**: Persist business facts as events, derive current state.'
+  - '* **Saga Patterns**: Implement orchestration/choreography for long-running workflows
+    (e.g., onboarding).'
+  - '* **MACH**: Modular, API-first, Cloud-native, Headless principles enforced across
+    the stack.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '```'
+  - apps/
+  - admin-portal/
+  - client-dashboards/
+  - developer-portal/
+  - employee-portal/
+  - investor-portal/
+  - marketing-site/
+  - support-portal/
+  - ''
+  - services/
+  - ai-workspace/
+  - assessments/
+  - auth/
+  - billing/
+  - clients/
+  - devtools/
+  - engagements/
+  - enablement/
+  - investor-relations/
+  - ip-assets/
+  - marketplace/
+  - notifications/
+  - projects/
+  - solutions/
+  - support/
+  - templates/
+  - tenancy/
+  - ''
+  - packages/
+  - api-clients/
+  - auth-client/
+  - design-system/
+  - domain-events/
+  - event-bus/
+  - ui/
+  - utils/
+  - ''
+  - infra/
+  - config/
+  - docs/
+  - scripts/
+  - '```'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* **Workspace**: Client''s dedicated environment for running AI workflows.'
+  - '* **Execution**: A model run triggered by a user or automation.'
+  - '* **Template**: Predefined configuration for a reusable use case.'
+  - '* **Engagement**: A scoped consulting project.'
+  - '* **IP Asset**: Reusable code or framework developed internally.'
+  - '* **Portal**: Role-specific application surface.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* **RBAC** with multi-tenant awareness.'
+  - '* Scoped API tokens and SDK access per developer or vendor.'
+  - '* Central auth service with pluggable providers (OIDC, SAML, etc).'
+  - '* Per-tenant secrets and config management.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* Distributed tracing via OpenTelemetry.'
+  - '* Event logs and projections stored for replayability.'
+  - '* Metrics at domain and tenant level.'
+  - '* Audit logs scoped per user and org.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* Marketplace APIs, app submission flows.'
+  - '* Webhooks and event subscriptions.'
+  - '* Client/SDK generator in `packages/api-clients/`'
+  - '* Developer sandbox and telemetry dashboard.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* [ ] Finalize DDD domain models per service'
+  - '* [ ] Scaffold core services (auth, clients, ai-workspace)'
+  - '* [ ] Define shared `domain-events` & `event-bus`'
+  - '* [ ] Stand up minimal portal skeletons'
+  - '* [ ] Setup Turbo, Changesets, CI/CD pipeline'
+  - '* [ ] Map first round of events & sagas'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '* ADRs to be added in `docs/architecture/adr/`'
+  - '* Ubiquitous Language dictionary in `docs/ubiquitous-language.md`'
+  - '* Event types documented in `packages/domain-events/`'
+  - '* CLI for scaffolding domains, services, and portals: `tools/dev-cli`'
+  - ''
+  - '---'
+- filename: events.md
+  path: docs/architecture/events.md
+  title: Event Design Principles
+  headings:
+  - '## General Guidelines:'
+  - '## Structure'
+  - '## Versioning'
+  - '## Event Categories'
+  - '## Examples'
+  - '## Registration'
+  content:
+  - ''
+  - ''
+  - '- "Events are named in past tense using <Entity><VerbPastTense> format."'
+  - '- "Events should be factual, observable, and reflect a domain concept."'
+  - '- "Events are immutable."'
+  - '- "Use Zod for schema validation."'
+  - ''
+  - ''
+  - // Example
+  - '```'
+  - export const ModelCreated = z.object({
+  - 'modelId: z.string().uuid(),'
+  - 'createdBy: z.string().email(),'
+  - 'timestamp: z.string().datetime(),'
+  - '});'
+  - ''
+  - export type ModelCreated = z.infer<typeof ModelCreated>;
+  - '```'
+  - ''
+  - ''
+  - '- Events are stored in versioned folders: v1/, v2/, etc.'
+  - '- Major version changes (breaking) require new folders.'
+  - ''
+  - ''
+  - "Category\t\tDescription"
+  - ''
+  - "Domain Events\t\tCore changes in business state (e.g. ClientOnboarded, InvoicePaid)"
+  - "Integration Events\tExternal system notifications or sync points (e.g. ZendeskTicketSynced)"
+  - "Lifecycle Events\tInternal process and audit events (e.g. SagaCompleted, ProjectionRefreshed)"
+  - ''
+  - '```'
+  - // domain-events/billing/v1/InvoiceGenerated.ts
+  - export const InvoiceGenerated = z.object({
+  - 'invoiceId: z.string(),'
+  - 'tenantId: z.string(),'
+  - 'amount: z.number(),'
+  - 'issuedAt: z.string()'
+  - '});'
+  - ''
+  - export type InvoiceGenerated = z.infer<typeof InvoiceGenerated>;
+  - '```'
+  - ''
+  - ''
+  - ''
+  - '- All events are exported through packages/domain-events/index.ts'
+  - '- CLI auto-updates this index'
+- filename: bounded-contexts.md
+  path: docs/architecture/bounded-contexts.md
+  title: null
+  headings: []
+  content:
+  - Bounded Contexts
+  - ''
+  - A Bounded Context defines the explicit boundaries within which
+  - a particular domain model is defined and applicable. Each service
+  - owns its model, logic, and data. Coordination between contexts
+  - happens through domain events, APIs, or message brokers.
+  - ''
+  - Core Contexts
+  - ''
+  - "Context\t\t\tDescription"
+  - ''
+  - "Auth\t\t\tIdentity, user accounts, permissions, and authentication flows."
+  - "Clients\t\t\tClient company and user management, onboarding, provisioning."
+  - "AI Workspace\t\tManagement and execution of AI projects, models, datasets, and\
+    \ runs."
+  - "Billing\t\t\tSubscriptions, payments, invoicing, and usage metering."
+  - "Templates\t\tReusable prompt, project, and model templates."
+  - "Projects\t\tEnd-to-end tracking of client transformation projects and deliverables."
+  - "Engagements\t\tScoped consulting engagements, deliverables, approvals, and lifecycle."
+  - "Enablement\t\tEnablement resources, documentation, training plans."
+  - "Notifications\t\tMessaging, alerts, and in-app/email notifications."
+  - "Devtools\t\tAPI tokens, webhook configuration, sandbox logs, and telemetry."
+  - "Support\t\t\tHelpdesk, ticketing, chat, and knowledge base."
+  - "Marketplace\t\tVendor extensions, app submissions, integration listings."
+  - "Investor\t\tAccess to reports, KPIs, VDR, financials for shareholders."
+  - "Tenancy\t\t\tTenant isolation, account contexts, workspaces, subdomains."
+  - "IP Assets\t\tStorage and lifecycle of client-specific and platform intellectual\
+    \ property."
+- filename: sagas.md
+  path: docs/architecture/sagas.md
+  title: Generic Saga Skeleton
+  headings: []
+  content:
+  - ''
+  - This pattern coordinates multiple distributed steps and
+  - maintains the consistency of workflows across services.
+  - ''
+  - // root/services/<domain>/application/sagas/<SagaName>.ts
+  - '// Example: services/billing/application/sagas/ProvisionAndBillClientSaga.ts'
+  - ''
+  - '```'
+  - import { DomainEvent } from '@domain-events';
+  - import { publishEvent, subscribeToEvent } from '@event-bus';
+  - ''
+  - export class ProvisionAndBillClientSaga {
+  - 'static start(event: DomainEvent) {'
+  - // Start of saga
+  - subscribeToEvent('ClientProvisioned', async (payload) => {
+  - await publishEvent('BillingAccountCreated', {
+  - 'clientId: payload.clientId,'
+  - 'plan: payload.plan,'
+  - '});'
+  - '});'
+  - ''
+  - subscribeToEvent('BillingAccountCreated', async (payload) => {
+  - await publishEvent('WelcomeNotificationSent', {
+  - 'clientId: payload.clientId,'
+  - '});'
+  - '});'
+  - '}'
+  - ''
+  - static compensate() {
+  - // Define compensation actions if something fails (optional)
+  - '}'
+  - '}'
+  - '```'
+  - Sagas should be stateless where possible. Use a durable store or event store for
+    tracking state if needed.
+- filename: contexts-map.md
+  path: docs/architecture/contexts-map.md
+  title: Context Map
+  headings:
+  - '## Upstream / Downstream Relationships'
+  - '## Shared Kernel Agreements'
+  - '## Anti-Corruption Layers (ACLs)'
+  - '## Conformist Relationships'
+  content:
+  - ''
+  - ''
+  - Clients is downstream of Auth and Tenancy.
+  - AI Workspace is downstream of Clients, Templates, and Billing.
+  - Billing is upstream of Notifications and Investor.
+  - Engagements is downstream of Clients, Enablement, and Projects.
+  - Devtools is downstream of Auth and Clients.
+  - Support is downstream of Clients, Engagements, and Billing.
+  - Marketplace is downstream of Tenancy and Vendor definitions.
+  - ''
+  - ''
+  - ''
+  - Auth and Tenancy share kernel definitions for user identity, session, and tenant
+    resolution.
+  - Clients and Billing share kernel on ClientAccount, SubscriptionPlan, and billing
+    identifiers.
+  - Templates and AI Workspace share kernel on PromptTemplate, ModelTemplate, and
+    validation schemas.
+  - Devtools and AI Workspace share kernel on API access keys, scopes, and audit logs.
+  - ''
+  - ''
+  - ''
+  - AI Workspace uses an ACL for integrating with Templates to transform legacy templates
+    into updated prompt DSLs.
+  - Investor uses an ACL to read Billing and Projects KPIs in aggregate form.
+  - Support uses an ACL for Engagements and Clients to surface limited context for
+    ticket resolution.
+  - ''
+  - ''
+  - ''
+  - Notifications conforms to the data model provided by upstream event emitters (e.g.,
+    InvoiceGenerated, ModelExecutionCompleted).
+  - Enablement conforms to the formats and metadata provided by Templates.
+  - Marketing Site conforms to Marketplace schemas for rendering vendor/integration
+    data.
+  - This context map supports a service-oriented architecture with clear bounded context
+    ownership and integration contracts.
+- filename: index.md
+  path: docs/requirements/index.md
+  title: Software Documentation Index
+  headings:
+  - "## \U0001F9FE Core Requirements"
+  - "## \U0001F9F1 Architecture"
+  - "## \U0001F510 Security"
+  - "## \U0001F6E0 DevOps"
+  - "## \U0001F504 Lifecycle"
+  - "## \U0001F4DA Engineering Practice"
+  content:
+  - ''
+  - '- [Software Requirements Document](./software-requirements-document.md)'
+  - ''
+  - '- [Architecture Principles](./architecture-principles.md)'
+  - '- [Bounded Contexts](../architecture/bounded-contexts.md)'
+  - '- [Domain Events](../architecture/events.md)'
+  - '- [Ubiquitous Language](../architecture/ubiquitous-language.md)'
+  - '- [Context Maps](../architecture/context-maps.md)'
+  - '- [Sagas](../architecture/sagas.md)'
+  - ''
+  - '- [Security Guidelines](./security.md)'
+  - ''
+  - '- [DevOps & Infrastructure](./devops.md)'
+  - ''
+  - '- [SDLC Process](./sdlc-process.md)'
+  - ''
+  - '- [Coding Guidelines](./coding-guidelines.md)'
+  - '- [Integration Policy](./integration-policy.md)'
+- filename: software-requirements-document.md
+  path: docs/requirements/software-requirements-document.md
+  title: Software Requirements Document (SRD)
+  headings:
+  - '## 1. Purpose'
+  - '## 2. Scope'
+  - '## 3. Target Users'
+  - '## 4. Functional Requirements'
+  - '### 4.1 Core Capabilities'
+  - '### 4.2 Portals & Interfaces'
+  - '## 5. Non-Functional Requirements'
+  - '## 6. Technical Constraints'
+  - '## 7. Software Interfaces'
+  - '## 8. Operational Requirements'
+  - '## 9. Domain Events & Messaging'
+  - '## 10. System Architecture Principles'
+  - '## 11. Security Requirements'
+  - '## 12. Compliance & Legal'
+  - '## 13. Appendix: Supporting Documents'
+  content:
+  - ''
+  - "**System Title**: AIC AI Platform \u2014 Multi-Tenant AI Consulting and Enablement\
+    \ Suite"
+  - '**Author**: Applied Innovation Corporation (AIC)'
+  - '**Version**: 1.0'
+  - '**Last Updated**: July 2025'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - "This document defines the functional, non-functional, operational, and architectural\
+    \ requirements for the AIC AI Platform \u2014 a secure, composable, multi-tenant\
+    \ system for delivering AI consulting, enablement, and transformation to SMB and\
+    \ enterprise clients. It consolidates insights across security, architecture,\
+    \ DevOps, SDLC, and user experience to act as a single source of truth."
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'The AIC AI Platform supports:'
+  - ''
+  - '- AI consulting engagements and delivery workflows'
+  - '- An AI Platform-as-a-Service (PaaS) for client-facing teams'
+  - '- Internal tooling for consultants, support, and operations'
+  - '- Developer tools, SDKs, and marketplaces for third parties'
+  - '- Administrative systems for managing users, tenants, apps, and infrastructure'
+  - '- Investor reporting and VDR access'
+  - '- Multi-portal frontend architecture aligned with MACH principles'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| User Type        | Description |'
+  - '|------------------|-------------|'
+  - '| **Admin**        | Manages system-wide settings, tenants, billing, and support
+    |'
+  - '| **Consultant**   | Provides services to client teams and executes delivery
+    projects |'
+  - '| **Client User**  | End user of the PaaS platform on behalf of an enterprise
+    client |'
+  - '| **Developer**    | Internal, client-hired, or third-party developer managing
+    custom integrations |'
+  - '| **Vendor**       | Manages marketplace extensions and app submissions |'
+  - '| **Support Staff**| Handles tickets, helpdesk, and product support |'
+  - '| **Investor**     | Read-only access to business metrics, reports, and VDR assets
+    |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- User onboarding, tenant creation, authentication & authorization'
+  - '- Multi-tenant workspace isolation and resource partitioning'
+  - '- AI model management: training, deployment, inference, monitoring'
+  - '- Integration with third-party tools via APIs, webhooks, SDKs'
+  - '- Support for structured engagements and templated transformations'
+  - '- Secure billing, audit trails, API rate limiting, and usage metrics'
+  - ''
+  - '- Admin Portal for platform governance'
+  - '- Consultant Employee Portal'
+  - '- Client Dashboards with model execution and workspace tools'
+  - '- Developer Portal with sandbox, docs, and telemetry'
+  - '- Vendor Portal with publishing flows and analytics'
+  - '- Support Portal with ticketing and knowledge base'
+  - '- Investor Portal with financial views and read-only assets'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Category          | Description |'
+  - '|------------------|-------------|'
+  - "| **Performance**  | \u2264 200ms p99 latency for portal UIs and APIs |"
+  - '| **Scalability**  | Horizontally scalable via Kubernetes and event-driven services
+    |'
+  - '| **Security**     | Zero-trust model, RBAC, credential rotation, audit logging
+    |'
+  - '| **Availability** | 99.9% uptime SLA with HA architecture and active monitoring
+    |'
+  - '| **Compliance**   | GDPR, SOC 2 alignment, NDA support for sensitive projects
+    |'
+  - '| **Maintainability** | Microservices organized by bounded contexts and shared
+    kernel |'
+  - '| **Interoperability** | REST, GraphQL, Webhooks, OpenAPI 3.0, SDKs for major
+    languages |'
+  - '| **Accessibility**| WCAG AA compliance across portals |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Monorepo managed via [PNPM Workspaces](https://pnpm.io) and [Turborepo](https://turbo.build)'
+  - '- Multi-language microservices (Node.js, Go, Python, Java)'
+  - '- Kubernetes (EKS), Helm, Terraform-managed infrastructure'
+  - '- Event-driven via message broker (NATS or Kafka)'
+  - '- Persistent storage: PostgreSQL, S3, Redis'
+  - '- Secrets management via AWS Secrets Manager / Vault'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Interface           | Description |'
+  - '|---------------------|-------------|'
+  - '| **REST APIs**       | Service-specific HTTP endpoints for client & system use
+    |'
+  - '| **GraphQL APIs**    | Flexible client data querying interface |'
+  - '| **Webhooks**        | Push-based integration mechanism for external systems
+    |'
+  - '| **gRPC (optional)** | Internal system-to-system high-performance APIs |'
+  - '| **OpenAPI Docs**    | Generated API specifications and documentation |'
+  - '| **SDKs**            | Typed clients (JS, Python, Go) provided via `api-clients`
+    package |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- CI/CD Pipelines (GitHub Actions + Turbo + Changesets)'
+  - '- GitOps-based infrastructure and environment management'
+  - '- Observability: metrics, traces, structured logging'
+  - '- Support for multiple deployment stages: dev, staging, prod'
+  - '- Rollback capabilities via Blue/Green or Canary deployments'
+  - '- Live sandbox environment for external developer testing'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- All service interactions and state transitions emit domain events'
+  - '- Domain events use versioned schemas with Zod validation'
+  - '- Shared `event-bus` library handles publishing/subscription'
+  - '- Events are persisted in a pluggable event store'
+  - '- Events are replayable for projections, CQRS, and audit trails'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Clean Architecture / Hexagonal: ports and adapters pattern'
+  - '- Domain-Driven Design (DDD): aggregates, value objects, services'
+  - '- Event Sourcing + CQRS'
+  - '- Bounded Contexts aligned with business domains (auth, clients, billing, support,
+    etc.)'
+  - '- Sagas and orchestrators for distributed consistency'
+  - '- Modular, composable, contract-driven development'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- RBAC, API tokens, OAuth2, MFA support'
+  - '- Just-in-time privilege elevation ("break glass" workflows)'
+  - '- Rotation of secrets, keys, credentials on schedule'
+  - '- Environment-level network segmentation'
+  - '- Periodic access reviews and policy audits'
+  - '- Signed and validated webhook/event payloads'
+  - '- Least-privilege IAM for infrastructure access'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Clients may sign NDA for internal use of AI PaaS'
+  - '- Read-only access available for investors and auditors'
+  - '- System supports classification and tagging of sensitive data'
+  - '- License restricts distribution or commercial use without approval'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- [Architecture Principles](./architecture-principles.md)'
+  - '- [Bounded Contexts](../architecture/bounded-contexts.md)'
+  - '- [Event Catalog](../architecture/events.md)'
+  - '- [Security Guidelines](./security.md)'
+  - '- [DevOps Reference](./devops.md)'
+  - '- [SDLC Lifecycle](./sdlc-process.md)'
+  - '- [Integration Policy](./integration-policy.md)'
+  - '- [Context Maps](../architecture/context-maps.md)'
+  - ''
+  - '---'
+- filename: security.md
+  path: docs/requirements/security.md
+  title: Security Requirements
+  headings:
+  - '## 1. Overview'
+  - '## 2. Security Principles'
+  - '## 3. Authentication & Authorization'
+  - '### 3.1 Identity Management'
+  - '### 3.2 Role-Based Access Control (RBAC)'
+  - '## 4. Data Security'
+  - '### 4.1 Encryption'
+  - '### 4.2 Tenant Isolation'
+  - '## 5. Infrastructure Security'
+  - '### 5.1 Containerization & Runtime'
+  - '### 5.2 Network'
+  - '## 6. Development & DevSecOps'
+  - '### 6.1 Secure SDLC'
+  - '### 6.2 CI/CD Pipeline Hardening'
+  - '## 7. Monitoring & Response'
+  - '## 8. Compliance'
+  - '## 9. Incident Response Plan'
+  - '## 10. Security Roadmap'
+  content:
+  - ''
+  - ''
+  - "This document outlines the security principles, protocols, and operational guidelines\
+    \ for the AIC AI Platform. Security is foundational to the platform's design,\
+    \ given its multi-tenant nature, integration with external apps, and role-based\
+    \ user access. All components of the system\u2014apps, services, packages, data\
+    \ stores, and infrastructure\u2014must conform to strict security protocols for\
+    \ confidentiality, integrity, and availability."
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Zero Trust Architecture (ZTA):** Trust no network, user, or system by default.'
+  - '- **Defense in Depth:** Multiple layers of security controls across zones.'
+  - '- **Least Privilege Access:** Grant only the minimum access required.'
+  - '- **Encryption Everywhere:** Encrypt data in transit and at rest.'
+  - '- **Auditability:** All actions must be observable and logged.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '- **SSO Support** via OAuth 2.0 / OpenID Connect for all user-facing apps.'
+  - '- **Tenant Isolation** at authentication and session layers.'
+  - '- **Session Management** with time-based expiration and refresh tokens.'
+  - ''
+  - ''
+  - '| Role          | Scope                  |'
+  - '|---------------|-------------------------|'
+  - '| Admin         | Global system access    |'
+  - '| Consultant    | Internal service access |'
+  - '| Client User   | Tenant-scoped features  |'
+  - '| Developer     | Scoped APIs, sandboxes  |'
+  - '| Vendor        | Marketplace management  |'
+  - '| Support       | Customer support tools  |'
+  - '| Investor      | Read-only VDR, KPIs     |'
+  - ''
+  - Access rules are codified and enforced across frontend guards, API layers, and
+    services using centralized policies.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '- **At Rest:** All databases and S3 buckets encrypted (AES-256).'
+  - '- **In Transit:** All internal and external communication over TLS 1.2+.'
+  - '- **Secrets:** Stored in KMS or Vault with role-based retrieval.'
+  - ''
+  - ''
+  - '- Per-tenant DB schemas or row-level security.'
+  - '- Strong namespace segmentation for events and logs.'
+  - '- Prohibited cross-tenant access by design.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '- All services deployed via containers (Docker) in Kubernetes.'
+  - '- Images scanned for vulnerabilities (e.g., Trivy, Snyk) during CI.'
+  - '- Resource limits and seccomp profiles applied to all pods.'
+  - ''
+  - ''
+  - '- Internal services segmented with NetworkPolicies.'
+  - '- Egress/Ingress controlled via service mesh or gateway (e.g., Istio, Linkerd).'
+  - '- API Gateways enforce auth, rate-limiting, and IP whitelisting.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '- Code review for all PRs with security checklist.'
+  - '- Dependencies audited with Renovate + Changesets.'
+  - '- Static analysis with ESLint, SonarQube, or Semgrep.'
+  - '- Pre-commit and CI secrets scanning.'
+  - ''
+  - ''
+  - '- GitHub Actions with limited secrets scope.'
+  - '- Token rotation policies enforced.'
+  - '- Builds verified with checksums/signatures.'
+  - '- Only signed commits allowed on `main`.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Audit logs persisted for all auth, data access, and mutations.'
+  - '- Alerting pipelines on suspicious patterns.'
+  - '- Rate-limiting and IP blocking after brute-force attempts.'
+  - '- SIEM integration optional for enterprise clients.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- NDA-enforced access policies.'
+  - '- SOC 2 alignment (Type I in short-term, Type II roadmap).'
+  - '- GDPR-ready data deletion and export features.'
+  - '- Access review automation for all privileged accounts.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Phase     | Response Details |'
+  - '|-----------|------------------|'
+  - '| Detection | Alerts from monitoring, logs, anomaly detection |'
+  - '| Containment | Lock accounts, revoke tokens, isolate pods |'
+  - '| Investigation | Analyze logs, audit trails, snapshots |'
+  - '| Recovery | Rollback deployments, reset credentials |'
+  - '| Notification | Stakeholders informed within SLA (24h max) |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- [x] RBAC implementation across services'
+  - '- [x] Encrypted secret management'
+  - '- [x] CI vulnerability scanning'
+  - '- [x] GitHub branch protection + signed commits'
+  - '- [ ] Enterprise SSO integration'
+  - '- [ ] Full SOC 2 Type II certification'
+  - '- [ ] Bug bounty program'
+  - ''
+- filename: architecture-principles.md
+  path: docs/requirements/architecture-principles.md
+  title: Architecture Principles
+  headings:
+  - '## 1. Domain-Driven Design (DDD)'
+  - '## 2. Modular Monorepo'
+  - '## 3. Clean/Hexagonal Architecture'
+  - '## 4. CQRS + Event Sourcing'
+  - '## 5. MACH Architecture'
+  - '## 6. Event-Driven Systems'
+  - '## 7. Composability'
+  - '## 8. Observability & Operations'
+  - '## 9. Security by Design'
+  - '## 10. Evolvability & Automation'
+  - '## 11. Platform Governance'
+  - '## 1. Domain-Driven Design (DDD)'
+  - '## 2. Hexagonal Architecture (Ports & Adapters)'
+  - '## 3. Microservices'
+  - '## 4. Event-Driven Architecture'
+  - '## 5. CQRS & Event Sourcing'
+  - '## 6. MACH Principles'
+  - '## 7. Composability'
+  - '## 8. Modularity'
+  - '## 9. Scalability'
+  - '## 10. Security-by-Design'
+  - '## 11. Observability'
+  - '## 12. Automation-First'
+  - '## 13. Self-Service Enablement'
+  - '## 14. Platform Thinking'
+  - '## 15. Continuous Improvement'
+  - '## References'
+  content:
+  - ''
+  - This document defines the guiding architectural principles that govern the design,
+    evolution, and operation of the AIC AI Platform. These principles ensure a scalable,
+    secure, composable system aligned with Domain-Driven Design (DDD), MACH architecture,
+    and cloud-native best practices.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Bounded Contexts:** Each domain is implemented and deployed independently
+    to minimize coupling.'
+  - '- **Ubiquitous Language:** Shared vocabulary between code, documentation, and
+    domain experts.'
+  - '- **Strategic Design:** Clear upstream/downstream relationships and context maps.'
+  - '- **Event-First Thinking:** Domain Events capture business state transitions
+    for traceability and reactive architectures.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Single Source of Truth:** All apps, services, packages, and shared utilities
+    live in one well-structured monorepo.'
+  - '- **Tight CI/CD Integration:** Build pipelines, versioning, and dependency management
+    powered by `turbo`, `pnpm`, and `changesets`.'
+  - '- **Tooling as First-Class:** Scripts, generators, and infrastructure definitions
+    live alongside code and follow the same standards.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Ports and Adapters:** Business logic is isolated from frameworks, databases,
+    and delivery mechanisms.'
+  - '- **Inversion of Control:** Interfaces and dependency injection allow decoupling
+    and testability.'
+  - '- **Independent Evolvability:** Infrastructure can change without impacting core
+    logic.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Separation of Concerns:** Commands change state, queries read state.'
+  - '- **Immutable Event Logs:** Events represent the source of truth; state is derived
+    via projections.'
+  - '- **Replayable & Auditable:** Full state reconstruction is possible via event
+    replay.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Microservices:** Independently deployed services organized around business
+    domains.'
+  - '- **API-First:** All external interactions are contract-driven and discoverable.'
+  - '- **Cloud-Native:** Kubernetes, containers, declarative infra (Terraform, Helm).'
+  - '- **Headless:** Frontends communicate via GraphQL or REST APIs; UI and backend
+    evolve independently.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Async Communication:** Services emit and subscribe to events to decouple
+    interactions.'
+  - '- **Domain Events:** Emitted from aggregates and consumed by sagas, policies,
+    or other services.'
+  - '- **Event Bus:** Central broker with clear schema versioning and replay capabilities.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Extensible Modules:** Features are built as plug-in services or packages.'
+  - '- **Shared Interfaces:** APIs, packages, and schemas are reused across apps and
+    services.'
+  - '- **Marketplace-Ready:** Vendors can publish extensions that integrate natively
+    into the platform.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Structured Logging:** All logs are queryable and correlated by trace IDs.'
+  - '- **Distributed Tracing:** Across apps and services for root cause analysis.'
+  - '- **Health Probes:** Readiness and liveness endpoints for orchestration.'
+  - '- **Infrastructure as Code:** All environments (dev, staging, prod) are reproducible
+    and auditable.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Zero Trust:** Every service and user must authenticate and be authorized.'
+  - '- **Defense in Depth:** Layered controls across app, infra, network, and CI/CD
+    layers.'
+  - '- **Immutable Deployments:** Builds are reproducible and verified.'
+  - '- **Least Privilege:** Every component operates with minimal required permissions.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **CLI Scaffolding:** All domains, services, packages, and events are generated
+    using tools.'
+  - '- **Versioned Events & APIs:** All breaking changes require explicit versioning.'
+  - '- **ADR-Driven Change:** Architectural decisions are logged and reviewed in `docs/architecture/adr/`.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Tech Radar:** New technologies must pass ADRs and pilot tests.'
+  - '- **Policy-Driven Dev:** Linting, commit conventions, and CI checks enforce standards.'
+  - '- **Tenant-Aware:** All platform capabilities respect multi-tenancy boundaries
+    and constraints.'
+  - ''
+  - ''
+  - '- Organize software around **business capabilities** and **bounded contexts**'
+  - '- Ubiquitous Language must be reflected in code and documentation'
+  - '- Favor aggregates, value objects, domain services, and entities within services'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Every service must expose external interfaces via clearly defined **ports**'
+  - '- Infrastructure dependencies (databases, queues, APIs) are injected as **adapters**'
+  - '- Business logic must be isolated from delivery and transport layers'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Services are independently deployable, testable, and loosely coupled'
+  - '- Bounded contexts are implemented as services aligned with subdomains'
+  - '- Internal contracts use domain events; external contracts use stable APIs'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- All state changes are modeled as domain events'
+  - '- Events are immutable, durable, and broadcast asynchronously'
+  - '- Services subscribe to events using the event bus (e.g., NATS, Kafka)'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Command Query Responsibility Segregation (CQRS)**: Separate models for writes
+    and reads'
+  - '- **Event Sourcing**: The system state is rebuilt by replaying a sequence of
+    domain events'
+  - '- Enables auditability, debugging, and time-travel features'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - "**M**icroservices \u2014 Each service encapsulates a business capability"
+  - "**A**PI-first \u2014 All capabilities are exposed via versioned contracts"
+  - "**C**loud-native \u2014 The platform is containerized and orchestrated (e.g.,\
+    \ Kubernetes)"
+  - "**H**eadless \u2014 Frontends consume data via APIs and events"
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Capabilities (e.g., auth, payments, workflows) are exposed as pluggable modules'
+  - '- Marketplace enables third-party extensions, apps, and automations'
+  - '- Clients can compose their own dashboards, automations, and model pipelines'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Clear module boundaries with encapsulated responsibilities'
+  - '- Shared packages (e.g., `domain-events`, `event-bus`, `auth-client`) are versioned
+    and reused'
+  - '- Cross-cutting concerns like logging, tracing, and config are standardized in
+    packages'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Services must be horizontally scalable'
+  - '- Stateless interfaces are preferred'
+  - '- Backpressure and retries must be built into consumers and APIs'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- All APIs require authentication and granular authorization'
+  - '- Sensitive data must be encrypted at rest and in transit'
+  - '- Audit logs are required for all tenant-sensitive operations'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Platform must support distributed tracing, structured logging, and metrics'
+  - '- All events and API requests must include trace and correlation IDs'
+  - '- Dashboards must monitor latency, errors, throughput, and saturation'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- All actions should be automatable via CLI, CI/CD pipelines, or APIs'
+  - '- Infrastructure as Code (IaC) is the default (Terraform, Helm, GitOps)'
+  - '- Environment bootstrap, provisioning, teardown are fully scriptable'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Tenants, developers, and vendors must be empowered through:'
+  - '- Self-service onboarding'
+  - '- CLI tooling and templates'
+  - '- Sandbox environments'
+  - '- Developer documentation and event catalogs'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Treat the AI PaaS as a product for both internal and external users'
+  - '- Ensure extensibility, upgrade paths, and guardrails'
+  - '- Adopt product-level monitoring, usage insights, and lifecycle ownership'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- All major decisions must be captured via Architectural Decision Records (ADRs)'
+  - '- Regular architectural reviews and refactoring are required'
+  - '- Feedback loops must exist between platform, product, and engineering'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- `docs/architecture/adr/`'
+  - '- `docs/architecture/context-maps.md`'
+  - '- `docs/architecture/integration-policy.md`'
+  - '- `docs/requirements/software-requirements-document.md`'
+- filename: bounded-contexts.md
+  path: docs/requirements/bounded-contexts.md
+  title: Bounded Contexts
+  headings:
+  - '## Overview'
+  - '## Context Map'
+  - '## Context Relationships'
+  - '## Context Patterns'
+  - '## Example: AI Workspace Context'
+  - '## Development Structure'
+  content:
+  - ''
+  - This document defines the primary **bounded contexts** that structure the AIC
+    AI Platform. These contexts align with business capabilities and allow each domain
+    to evolve independently using Domain-Driven Design (DDD), Clean Architecture,
+    and event-driven principles.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - Bounded contexts are logical partitions of the platform that encapsulate domain
+    models, services, and data. Each context represents a single business capability
+    or core responsibility. Communication between them occurs via events or well-defined
+    APIs.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Bounded Context       | Description |'
+  - '|-----------------------|-------------|'
+  - '| **Auth**              | Manages identity, authentication, authorization, session
+    lifecycle, roles, and permissions. |'
+  - '| **Clients**           | Client onboarding, workspace management, subscriptions,
+    usage quotas, and team access. |'
+  - '| **Consultants**       | Internal consultant profiles, engagement history, skills,
+    certifications. |'
+  - '| **Engagements**       | AI transformation projects, deliverables, milestones,
+    outcomes, and collaboration. |'
+  - '| **AI Workspace**      | Low-code AI modeling interface, prompt templates, model
+    orchestration, dataset workflows. |'
+  - '| **Assessments**       | Capability assessments, readiness surveys, client maturity
+    models. |'
+  - '| **Templates**         | Reusable prompt templates, workflows, and AI transformation
+    artifacts. |'
+  - '| **Solutions**         | Solution blueprints, packaged AI modules, reusable
+    implementation patterns. |'
+  - '| **Billing**           | Pricing plans, invoices, payments, usage metering,
+    and receipts. |'
+  - '| **Marketplace**       | Third-party apps, vendor listings, API integrations,
+    and extensions. |'
+  - '| **Notifications**     | Alerts, emails, in-app messages, domain events routing.
+    |'
+  - '| **Support**           | Ticketing, live chat, knowledge base, service status.
+    |'
+  - '| **Tenancy**           | Multi-tenant isolation, workspace provisioning, context
+    scoping. |'
+  - '| **Developer Tools**   | API key management, SDKs, webhooks, GraphQL playground,
+    CLI sandbox. |'
+  - '| **Investor Relations**| Reporting, KPI dashboards, VDR access, compliance readiness.
+    |'
+  - '| **Marketing Site**    | Web presence, landing pages, blog, lead capture, SEO.
+    |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Auth** is a shared foundational context.'
+  - '- **Tenancy** acts as a root context that governs access to other contexts.'
+  - '- **AI Workspace**, **Engagements**, and **Solutions** form the core transformation
+    engine.'
+  - '- **Clients**, **Billing**, **Support**, and **Investor Relations** are orthogonal
+    operational domains.'
+  - '- **Templates**, **Assessments**, and **Developer Tools** are enabling contexts.'
+  - '- **Marketplace** introduces modular extension points via vendor participation.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Shared Kernel:** Between `Auth` and `Clients` for user metadata and team
+    access.'
+  - '- **Anticorruption Layer:** Between `Marketplace` and `AI Workspace` for sandboxing
+    vendor modules.'
+  - '- **Conformist:** Most portals conform to `Tenancy` boundaries.'
+  - '- **Upstream/Downstream:**'
+  - "- `Auth` \u2192 downstream to all others."
+  - "- `AI Workspace` \u2190 upstream from `Templates`, `Assessments`, `Solutions`."
+  - '- `Notifications` is downstream of nearly every event-emitting context.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '**Responsibilities:**'
+  - '- Prompt engineering'
+  - '- Dataset creation and mapping'
+  - '- Experiment versioning'
+  - '- Result visualizations'
+  - ''
+  - '**Boundaries:**'
+  - "- Cannot call billing directly \u2014 must emit `ModelExecutionBilled` event"
+  - "- Cannot modify users \u2014 must defer to Auth context"
+  - '- Exposes APIs to apps like Client Dashboard and Web'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'Each context is implemented as a microservice with:'
+  - '- `domain/` (aggregates, events, services, value objects)'
+  - '- `application/` (commands, queries, use cases)'
+  - '- `interfaces/` (REST, GraphQL, CLI)'
+  - '- `infrastructure/` (persistence, event store, brokers)'
+  - ''
+  - 'Example:'
+  - '```bash'
+  - services/ai-workspace/
+  - "\u251C\u2500\u2500 domain/"
+  - "\u251C\u2500\u2500 application/"
+  - "\u251C\u2500\u2500 interfaces/"
+  - "\u251C\u2500\u2500 infrastructure/"
+  - "\u251C\u2500\u2500 tests/"
+  - "\u2514\u2500\u2500 README.md"
+- filename: events.md
+  path: docs/requirements/events.md
+  title: Event-Driven Architecture & Domain Events
+  headings:
+  - '## Why Events?'
+  - '## Types of Events'
+  - '## Event Structure'
+  content:
+  - ''
+  - This document outlines how events are modeled, published, consumed, versioned,
+    and used across the AIC AI Platform to achieve reactive, scalable, and decoupled
+    service boundaries.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - Domain events are the primary communication mechanism between bounded contexts.
+    Events express something meaningful that **has already happened** in the system.
+  - ''
+  - 'Benefits include:'
+  - ''
+  - '- Loosely coupled microservices'
+  - '- Asynchronous workflows (e.g. CQRS + Event Sourcing)'
+  - '- Real-time notifications and auditability'
+  - '- Modular orchestration via Sagas and Policies'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Type         | Purpose |'
+  - '|--------------|---------|'
+  - '| **Domain Event** | Business-level fact emitted from an aggregate (e.g. `UserRegistered`)
+    |'
+  - '| **Integration Event** | Externalized event meant for outside systems or cross-context
+    pub-sub |'
+  - '| **System Event** | Internal technical event (e.g. `CacheRefreshed`, `DeploymentStarted`)
+    |'
+  - '| **Saga Event** | Long-running workflow coordination (e.g. `StepFailed`, `CompensationTriggered`)
+    |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'All events follow this interface:'
+  - ''
+  - '```ts'
+  - type DomainEvent<T = any> = {
+  - 'name: string;          // e.g., "ModelCreated"'
+  - 'version: string;       // e.g., "v1"'
+  - 'timestamp: string;     // ISO string'
+  - 'data: T;               // Payload schema'
+  - 'metadata?: {'
+  - 'traceId?: string;'
+  - 'tenantId?: string;'
+  - 'actorId?: string;'
+  - '};'
+  - '};'
+  - ''
+  - Schemas are validated with Zod.
+  - Event Lifecycle
+  - ''
+  - Raised by an aggregate or application service
+  - ''
+  - Persisted in event store (if event-sourced)
+  - ''
+  - Published to the event-bus
+  - ''
+  - Handled by zero or more listeners (policies, projections, sagas, external systems)
+  - ''
+  - Versioning Strategy
+  - ''
+  - 'To support event evolution:'
+  - ''
+  - Events are grouped into v1, v2, etc.
+  - ''
+  - Older consumers continue to use previous versions
+  - ''
+  - Breaking changes (field removal/renaming) result in a new version
+  - ''
+  - 'Example:'
+  - ''
+  - packages/domain-events/auth/v1/UserRegistered.ts
+  - packages/domain-events/auth/v2/UserRegistered.ts
+  - ''
+  - Event Export Pattern
+  - ''
+  - 'Every event file exports:'
+  - ''
+  - A named constant (event name)
+  - ''
+  - A schema definition (Zod)
+  - ''
+  - A typed payload interface
+  - ''
+  - 'Example:'
+  - ''
+  - // packages/domain-events/auth/v1/UserRegistered.ts
+  - import { z } from "zod";
+  - ''
+  - export const USER_REGISTERED = "auth.v1.UserRegistered";
+  - ''
+  - export const UserRegisteredSchema = z.object({
+  - 'userId: z.string().uuid(),'
+  - 'email: z.string().email(),'
+  - 'timestamp: z.string(),'
+  - '});'
+  - ''
+  - export type UserRegistered = z.infer<typeof UserRegisteredSchema>;
+  - ''
+  - Event Registration
+  - ''
+  - 'All events are re-exported in packages/domain-events/index.ts:'
+  - ''
+  - export * from './auth/v1/UserRegistered';
+  - export * from './model/v1/ModelCreated';
+  - // etc.
+  - ''
+  - This enables easier imports and developer ergonomics.
+  - Event Bus Implementation
+  - ''
+  - 'The event bus is located at packages/event-bus/ and provides:'
+  - ''
+  - publish(event)
+  - ''
+  - subscribe(eventName, handler)
+  - ''
+  - Adapters for message brokers (e.g., NATS, Kafka, Redis Streams)
+  - ''
+  - Internally uses an in-memory event emitter for dev and testing.
+  - Event Storage
+  - ''
+  - Event-sourced services store events in an event-store/ using append-only log files
+    or database-backed event streams. Common libraries like @eventstore/db-client
+    may be used.
+  - ''
+  - Snapshotting strategies may also apply for performance.
+  - Event Examples
+  - ''
+  - "UserRegistered \u2192 emitted from Auth context on user creation"
+  - ''
+  - "ModelCreated \u2192 emitted from AI Workspace when a model is generated"
+  - ''
+  - "EngagementCompleted \u2192 emitted when a consulting engagement is wrapped up"
+  - ''
+  - "AppInstalled \u2192 vendor marketplace extension installed into a client workspace"
+  - ''
+  - Guidelines
+  - ''
+  - Events must represent something in the past
+  - ''
+  - Name events using past tense (e.g., PaymentReceived, not ReceivePayment)
+  - ''
+  - Never mutate data in event handlers
+  - ''
+  - Prefer publishing events at the end of a transaction or aggregate mutation
+  - ''
+  - Avoid publishing events from HTTP controllers directly
+  - ''
+  - Next Steps
+  - ''
+  - Implement version folders for all existing events
+  - ''
+  - Add event templates to CLI (tools/cli/generators/event.ts)
+  - ''
+  - Register all existing events in packages/domain-events/index.ts
+  - ''
+  - Add tests for event schemas and handlers
+  - ''
+  - Document integration event boundaries (external systems)
+  - ''
+  - Define saga orchestration/coordination event contracts
+- filename: devops.md
+  path: docs/requirements/devops.md
+  title: DevOps Strategy & Infrastructure
+  headings:
+  - '## Goals'
+  - '## Tooling Stack'
+  - '## Repository Layout'
+  - '## CI/CD Flow'
+  - '## Environments'
+  - '## Secrets Management'
+  - '## Deployment Strategies'
+  - '## Release Management'
+  - '## Observability'
+  - '## Backup & Disaster Recovery'
+  - '## Future Enhancements'
+  content:
+  - ''
+  - This document outlines the DevOps vision, tooling, workflows, and automation practices
+    for the Applied Innovation Corporation (AIC) AI Platform and supporting services.
+    The goal is to ensure high-velocity, secure, and reliable delivery of platform
+    features and microservices.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Support CI/CD across all apps, services, and packages.'
+  - '- Enforce quality gates (linting, tests, build) before merge/deploy.'
+  - '- Enable isolated review environments for portal and API changes.'
+  - '- Automate infrastructure provisioning with GitOps and IaC.'
+  - '- Maintain robust observability (logs, metrics, tracing).'
+  - '- Integrate security and compliance into the delivery lifecycle (DevSecOps).'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Purpose               | Tool/Platform              |'
+  - '|------------------------|----------------------------|'
+  - '| CI/CD Pipelines        | GitHub Actions, CircleCI   |'
+  - '| Package Management     | `pnpm`, `changesets`       |'
+  - '| Task Orchestration     | `turbo`                    |'
+  - '| Infra as Code (IaC)    | Terraform                  |'
+  - '| Container Management   | Docker, Kubernetes (k8s)   |'
+  - '| GitOps/CD              | ArgoCD, Helm               |'
+  - '| Secrets Management     | HashiCorp Vault, Sealed Secrets |'
+  - '| Static Analysis        | ESLint, Prettier, SonarQube |'
+  - '| Test Runners           | Vitest, Jest, Playwright   |'
+  - '| Monitoring             | Prometheus, Grafana        |'
+  - '| Logging & Tracing      | Loki, Tempo, OpenTelemetry |'
+  - '| Code Hosting           | GitHub                     |'
+  - '| Artifact Registry      | GitHub Packages, DockerHub |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Folder                | Description |'
+  - '|------------------------|-------------|'
+  - '| `infra/terraform/`     | Terraform configurations (VPC, DB, auth, etc.) |'
+  - '| `infra/k8s/`           | Cluster resources per env (dev, staging, prod) |'
+  - '| `infra/helm/`          | Helm charts for each service |'
+  - '| `.circleci/`           | CircleCI workflows |'
+  - '| `.github/workflows/`   | GitHub Actions for app/service pipelines |'
+  - '| `scripts/`             | Shell scripts for bootstrap, cleanup, etc. |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 1. Developer pushes to a branch.
+  - '2. CI pipeline runs:'
+  - '- Lint'
+  - '- Unit tests'
+  - '- Type checking'
+  - '- Build verification'
+  - '3. Pull request created:'
+  - '- Triggers preview build (Netlify, Vercel, Render)'
+  - '- Preview link is posted in PR comment'
+  - '4. On merge to `main`:'
+  - '- Version bump via Changesets (if applicable)'
+  - '- Image builds via Docker'
+  - '- Helm deployment to dev or staging (ArgoCD/GitOps)'
+  - '- Canary testing (optional)'
+  - '- Promote to production via manual approval or green pipeline'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Name     | Purpose                  | Access Level |'
+  - '|----------|--------------------------|--------------|'
+  - '| `dev`    | Internal developer testing, unstable |'
+  - '| `staging`| QA, demos, client UAT     | Moderate     |'
+  - '| `prod`   | Live environment          | Restricted   |'
+  - ''
+  - Each environment has its own Kubernetes namespace, secrets, DB instances, and
+    ingress configuration.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Developer secrets managed via `.env`, `.env.example`, and `.envrc`'
+  - '- Runtime secrets loaded into Kubernetes from:'
+  - '- Sealed Secrets (encrypted in Git)'
+  - '- HashiCorp Vault via sidecar'
+  - '- CI secrets stored securely in GitHub Actions or CircleCI contexts'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Blue/Green** for UI portals'
+  - '- **Rolling Updates** for stateless services'
+  - '- **Canary Releases** for new APIs and ML workloads'
+  - '- **Feature Flags** powered by a flag management platform (e.g. LaunchDarkly
+    or OpenFeature)'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Versioning and changelogs managed via `changesets`'
+  - '- Each service and package can be versioned independently'
+  - '- Tagging happens via GitHub Actions'
+  - '- Publish artifacts to GitHub Packages or container registry'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Centralized logging (Loki) with labels per service'
+  - '- Metrics (Prometheus) exported from all pods and sidecars'
+  - '- Dashboards in Grafana for:'
+  - '- API latency'
+  - '- DB query health'
+  - '- Model usage patterns'
+  - '- Event bus throughput'
+  - '- Distributed tracing via OpenTelemetry and Tempo'
+  - '- Alerts piped into Slack, PagerDuty, or Opsgenie'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Automated backups via cloud snapshots (RDS, S3, etc.)'
+  - '- Infrastructure state stored in versioned Terraform backend'
+  - '- Encrypted S3 backups for database snapshots'
+  - '- Disaster simulation scenarios for quarterly drills'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- [ ] Policy-as-code for security gates (OPA/Gatekeeper)'
+  - '- [ ] Progressive delivery using Flagger or Argo Rollouts'
+  - '- [ ] Secret rotation with Vault automation'
+  - '- [ ] Multi-cluster support for global regions'
+  - '- [ ] Enhanced supply chain security (SLSA, Sigstore)'
+  - ''
+  - '---'
+  - ''
+- filename: sdlc-process.md
+  path: docs/requirements/sdlc-process.md
+  title: Software Development Lifecycle (SDLC) for AIC AI Platform
+  headings:
+  - '## 1. Overview'
+  - '## 2. SDLC Phases'
+  - '### Phase 1: Ideation & Discovery'
+  - '### Phase 2: Design & Modeling'
+  - '### Phase 3: Planning & Estimation'
+  - '### Phase 4: Implementation'
+  - '### Phase 5: Testing'
+  - '### Phase 6: Review & QA'
+  - '### Phase 7: Deployment'
+  - '### Phase 8: Monitoring & Feedback'
+  - '## 3. Automation Support'
+  - '## 4. Roles & Responsibilities'
+  - '## 5. Versioning & Change Management'
+  - '## 6. Governance & Compliance'
+  - '## 7. SDLC Diagram'
+  content:
+  - ''
+  - "This document defines the structured software development lifecycle (SDLC) for\
+    \ the Applied Innovation Corporation\u2019s AI Platform and consulting products.\
+    \ It aligns with modern agile, DevSecOps, and domain-driven principles to support\
+    \ continuous delivery, quality assurance, and multi-team collaboration."
+  - ''
+  - '---'
+  - ''
+  - ''
+  - "The AIC SDLC ensures that all changes\u2014whether for consulting projects, the\
+    \ PaaS platform, or internal tools\u2014are consistently designed, implemented,\
+    \ tested, and delivered through a repeatable pipeline."
+  - ''
+  - 'The process balances agility with governance to support:'
+  - '- Modular microservice development'
+  - '- Multi-tenant requirements'
+  - '- AI/ML-driven applications'
+  - '- Enterprise-grade reliability'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '- Capture business goals and user needs.'
+  - '- Conduct stakeholder interviews.'
+  - '- Align on bounded contexts and domains (DDD).'
+  - '- Create initial architecture decision records (ADRs).'
+  - '- Define epics, user stories, and acceptance criteria.'
+  - ''
+  - '**Artifacts**:'
+  - '- `docs/architecture/adr/`'
+  - '- `docs/requirements/software-requirements-document.md`'
+  - '- Ubiquitous language definitions'
+  - '- Project charter and roadmap'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Draft initial solution architecture (MACH, Hexagonal).'
+  - '- Identify core aggregates, domain services, and event flows.'
+  - '- Define bounded contexts and context maps.'
+  - '- Write policy and event models.'
+  - '- Refine workflows, data models, and interaction contracts.'
+  - ''
+  - '**Artifacts**:'
+  - '- `docs/architecture/bounded-contexts.md`'
+  - '- `docs/architecture/events.md`'
+  - '- `docs/architecture/context-maps/`'
+  - '- Diagrams in `assets/diagrams/` and `docs/architecture/diagrams/`'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Assign tasks to cross-functional teams (apps, services, DevOps).'
+  - '- Use agile/sprint-based planning (2-week sprints).'
+  - '- Tag tickets by domain, service, or portal.'
+  - '- Prioritize feature flags and domain slices for phased rollout.'
+  - ''
+  - '**Tools**:'
+  - '- Linear, Jira, or GitHub Projects'
+  - '- GitHub labels for services/contexts'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Scaffold new entities via CLI (`tools/cli`)'
+  - '- Write code using event-driven, modular design.'
+  - '- Follow versioning standards (e.g., v1 domain events).'
+  - '- Ensure separation of concerns (UI, application, domain, infra).'
+  - '- Use feature flags for risky changes.'
+  - ''
+  - '**Conventions**:'
+  - '- Commitlint, conventional commits'
+  - '- Format via Prettier'
+  - '- Typed using TypeScript (Node), Zod for schema validation'
+  - '- Changesets for versioning'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Write tests per layer:'
+  - '- Unit: value objects, domain services'
+  - '- Integration: service-to-service, database, event bus'
+  - '- E2E: portal UIs, API flows'
+  - '- Generate coverage reports.'
+  - '- Validate accessibility, security, and linting on every PR.'
+  - ''
+  - '**Frameworks**:'
+  - '- Jest, Vitest, Playwright'
+  - '- ESLint, Stylelint, Lighthouse'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Pull request checks:'
+  - '- Turbo task graph'
+  - '- Changeset bump'
+  - '- Lint + format'
+  - '- Test pass'
+  - '- Preview link (Vercel/Netlify)'
+  - '- Approval required from:'
+  - '- Tech lead for core changes'
+  - '- QA or SRE for infra-sensitive deployments'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - "- Dev \u2192 Staging \u2192 Production promotion flow."
+  - '- GitOps used to deploy with ArgoCD + Helm.'
+  - '- Apply canary strategy for new endpoints.'
+  - '- Post-deploy monitoring via OpenTelemetry + Grafana.'
+  - ''
+  - '**Artifacts**:'
+  - '- Docker image in GitHub Registry'
+  - '- Helm chart updated per service'
+  - '- PNPM workspace updated via CLI'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Logs and metrics via Loki, Prometheus.'
+  - '- Trace flows via Tempo, Jaeger.'
+  - '- Incident response via PagerDuty, Sentry.'
+  - '- Usage analytics from telemetry and event logs.'
+  - '- Feedback loop into next sprint via retrospectives.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - "- `scripts/scaffold-entity.sh` \u2014 Bootstrap packages, services"
+  - "- `tools/cli/generators/` \u2014 Auto-generate boilerplate"
+  - "- `.github/workflows/ci.yml` \u2014 CI integration"
+  - "- `.changeset/` \u2014 Versioning"
+  - "- `turbo.json` \u2014 Dev & build orchestration"
+  - '- GitHub Actions or CircleCI for testing, linting, preview'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Role       | Responsibility |'
+  - '|------------|----------------|'
+  - '| **Tech Lead** | Design reviews, architecture decisions, CI enforcement |'
+  - '| **Developer** | Feature development, domain modeling, testing |'
+  - '| **QA Engineer** | Write and execute test plans |'
+  - '| **DevOps** | Deployment pipelines, IaC maintenance |'
+  - '| **Product Owner** | Define requirements, prioritize backlog |'
+  - '| **Security** | Threat modeling, code scanning, compliance checks |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Semantic versioning enforced per package/service'
+  - '- Events, services, and packages support v1, v2 folders'
+  - '- Changelogs generated via Changesets'
+  - '- All changes traceable via commit history, ADRs, and PRs'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- License: Proprietary + Educational/Internal Use'
+  - '- Security requirements documented in `security.md`'
+  - '- DevOps standards in `devops.md`'
+  - '- Data protection measures aligned with SOC2 & GDPR targets'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '_TODO_: Add visual SDLC pipeline diagram under `docs/architecture/diagrams/sdlc.png`'
+  - ''
+  - '---'
+  - ''
+  - Would you like me to now generate `docs/domains/mlops.md`, `docs/domains/data-governance.md`,
+    or perhaps generate the accompanying SDLC diagram next?
+- filename: context-maps.md
+  path: docs/requirements/context-maps.md
+  title: Context Maps for AIC AI Platform
+  headings:
+  - '## 1. Purpose'
+  - '## 2. Bounded Context Relationships'
+  - '### Context Relationship Matrix'
+  - '## 3. Strategic Relationship Types'
+  - "### \U0001F501 Shared Kernel"
+  - "### \U0001F504 Customer/Supplier"
+  - "### \u26D3 Conformist"
+  - "### \U0001F501 Open Host Service"
+  - "### \U0001F6A7 Anticorruption Layer (ACL)"
+  - '## 4. Integration Styles'
+  - '## 5. Diagram (To Be Added)'
+  - '## 6. Versioning Strategy'
+  - '## 7. Maintenance'
+  content:
+  - ''
+  - This document visualizes and describes the relationships, boundaries, and integration
+    styles between bounded contexts in the AIC AI Platform using Domain-Driven Design
+    (DDD) strategic patterns.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - To clarify how each bounded context (e.g., Auth, Clients, Billing, Projects) interacts
+    within the platform, enabling informed decisions around autonomy, integration,
+    and evolution.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - The platform is composed of several core domains and supporting subdomains. Each
+    is designed as an independent context with clear ownership, and they interact
+    through events and APIs.
+  - ''
+  - ''
+  - '| Upstream Context     | Downstream Context      | Relationship Type        |
+    Integration Method         |'
+  - '|----------------------|-------------------------|---------------------------|-----------------------------|'
+  - '| **Auth**             | All contexts            | Shared Kernel             |
+    Library, Auth tokens        |'
+  - '| **Clients**          | Billing, Projects       | Customer/Supplier         |
+    REST API, Events            |'
+  - '| **Billing**          | Auth, Clients           | Conformist                |
+    Event-Driven, Contracts     |'
+  - '| **AI Workspace**     | Projects, Models        | Customer/Supplier         |
+    Event Bus, CQRS             |'
+  - '| **Projects**         | Templates, Models       | Open Host Service         |
+    Commands, Queries           |'
+  - '| **Marketplace**      | AI Workspace, Vendors   | Anticorruption Layer      |
+    Mapping Layer               |'
+  - '| **Support**          | Clients, Auth           | Conformist                |
+    REST API                    |'
+  - '| **Investor Relations**| Finance, Billing       | Customer/Supplier         |
+    Reports, Read Projections   |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Contexts**: `auth`, `domain-events`, `permissions`'
+  - '- **Pattern**: Shared codebases (e.g., session validation, JWT parsing, roles)'
+  - ''
+  - '- **Example**: `clients` supplies onboarding events to `billing` and `projects`'
+  - '- **Contract**: Explicit event schemas + versioned interfaces'
+  - ''
+  - '- **Example**: `support` conforms to `clients` schema for tickets'
+  - '- **Risk**: Tight coupling; mitigated with strong schema versioning'
+  - ''
+  - '- **Example**: `projects` exposes service methods for `templates`'
+  - '- **Contract**: Open API endpoints with schema validation (e.g., Zod)'
+  - ''
+  - '- **Example**: `marketplace` integrates with `ai-workspace` via adapter'
+  - '- **Goal**: Prevent leaking internal abstractions or data shapes'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Style               | Used By               | Transport     | Notes                               |'
+  - '|--------------------|-----------------------|---------------|-------------------------------------|'
+  - '| Event-Driven       | `billing`, `support`  | NATS, Kafka   | Async, loose coupling               |'
+  - '| REST API           | `clients`, `support`  | HTTPS         | Authenticated
+    via bearer tokens     |'
+  - '| GraphQL Federation | `developer-portal`    | GraphQL       | Composition of
+    APIs from services   |'
+  - '| RPC (future)       | TBD                   | gRPC/JSON-RPC | Only if ultra-perf
+    is needed        |'
+  - '| Shared Libraries   | `auth`, `utils`       | Local import  | Used for validation
+    and permissions |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '_TODO_: Add visual context map diagram at `docs/architecture/diagrams/context-map.png`.'
+  - ''
+  - '- Colored domains (core, supporting, generic)'
+  - '- Arrows indicating relationship direction and style'
+  - '- Legends for relationship types'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- All service and event interfaces are versioned (v1, v2 folders)'
+  - '- Context map is updated when:'
+  - '- A service introduces a new API or event stream'
+  - '- An integration style changes'
+  - '- A bounded context is refactored or merged'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Each service owns its side of the interface definition.'
+  - '- Coordination required for upstream breaking changes.'
+  - '- The CLI tooling (`tools/cli`) ensures registration of events, versioning, and
+    interface exposure.'
+  - '- Integration tests validate downstream contract adherence.'
+  - ''
+  - '---'
+  - ''
+  - Would you like the diagram scaffolded or a visual example of the context map created
+    next?
+- filename: integration-policy.md
+  path: docs/requirements/integration-policy.md
+  title: Integration Policy
+  headings:
+  - '## 1. Purpose'
+  - '## 2. Guiding Principles'
+  - '## 3. Integration Types'
+  - '### 3.1 Event-Driven Integration'
+  - '### 3.2 REST APIs'
+  - '### 3.3 GraphQL (Federation)'
+  - '### 3.4 Internal Libraries (Shared Kernel)'
+  - '## 4. Contract Management'
+  - '## 5. Error Handling'
+  - '## 6. Integration Observability'
+  - '## 7. Third-Party Integration'
+  - '## 8. Deprecation Policy'
+  - '## 9. Compliance and Auditing'
+  - '## 10. Change Governance'
+  - '## 11. References'
+  content:
+  - ''
+  - This document defines the standard policies and guidelines for integrating between
+    bounded contexts, services, and external systems within the AIC AI Platform. It
+    ensures maintainability, autonomy, and resilience across the platform.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'To enforce a clear and consistent approach to:'
+  - ''
+  - '- Inter-context communication'
+  - '- Event publishing and consumption'
+  - '- API design and usage'
+  - '- Contract management and versioning'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '1. **Loose Coupling**: Services must be independently deployable.'
+  - '2. **Explicit Contracts**: Every integration is governed by versioned, documented
+    interfaces.'
+  - '3. **Event First**: Prefer event-driven communication where possible.'
+  - '4. **Backward Compatibility**: APIs and events must not introduce breaking changes
+    without a formal deprecation process.'
+  - '5. **Security by Default**: All interfaces must be authenticated and authorized.'
+  - '6. **Autonomy First**: Services are allowed to diverge in implementation details
+    as long as they meet contracts.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - '- Transport: NATS, Kafka'
+  - '- Format: JSON with Zod validation'
+  - '- Versioning: Event names are namespaced and versioned (e.g., `v1.UserRegistered`)'
+  - '- Consumers must not assume delivery order or timing.'
+  - ''
+  - '**Examples:**'
+  - '- `ClientOnboarded` triggers `Billing` and `Support` workflows'
+  - '- `ModelExecutionStarted` is published from `ai-workspace` to `projects` and
+    `notifications`'
+  - ''
+  - ''
+  - '- Used for synchronous interactions that require guaranteed request-response.'
+  - '- Required headers: `Authorization: Bearer <token>`'
+  - '- Must implement OpenAPI specs and input validation.'
+  - ''
+  - '**Examples:**'
+  - '- `projects` service calling `templates` for rendering templates'
+  - '- `support` querying `clients` for account status'
+  - ''
+  - ''
+  - '- Used primarily in developer-facing portals.'
+  - '- Contracts are composed and versioned via Apollo Federation or Mesh.'
+  - ''
+  - ''
+  - '- Used sparingly for:'
+  - '- Auth/token validation'
+  - '- Common types'
+  - '- Utility functions'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Policy                     | Rule                                                                 |'
+  - '|---------------------------|----------------------------------------------------------------------|'
+  - '| Event Contracts            | Must be defined in `packages/domain-events/<domain>/vN/`            |'
+  - '| API Contracts              | Must have OpenAPI or GraphQL schema and validator
+    (Zod, Yup)        |'
+  - '| Breaking Changes           | Require ADR and 2-week deprecation window                           |'
+  - '| Testing                    | All external-facing contracts must be covered
+    by integration tests  |'
+  - '| Auto-registration          | CLI (`tools/cli/generators`) must register new
+    events/APIs          |'
+  - '| Documentation              | All contracts documented in `docs/contracts/`                       |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- REST: Use structured error codes and `application/problem+json`'
+  - '- Events: Include `correlationId`, `retryCount`, and `reason` fields for failures'
+  - '- Timeout and retry logic must be built into all consumers'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Every integration must:'
+  - '- Log event receipt and acknowledgment'
+  - '- Emit tracing spans via OpenTelemetry'
+  - '- Report to monitoring dashboards (e.g., Grafana, Datadog)'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Must go through security review'
+  - '- Must use internal proxy or API gateway'
+  - '- Contracts must be wrapped with an anticorruption layer'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Step        | Action                                  |'
+  - '|-------------|------------------------------------------|'
+  - '| 1. Notice   | Publish deprecation notice in changelog |'
+  - '| 2. Schedule | Set removal date (min 2 weeks out)      |'
+  - '| 3. Support  | Provide fallback or compatibility mode  |'
+  - '| 4. Remove   | Delete old interface after migration     |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- All APIs and event streams are audited for:'
+  - '- Security headers'
+  - '- Schema validation'
+  - '- Auth enforcement'
+  - '- Reports generated weekly for review by platform team'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'Changes to this policy must be:'
+  - '- Proposed via ADR'
+  - '- Reviewed by the Architecture Council'
+  - '- Merged with a major version bump if contract-affecting'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- `packages/domain-events/`'
+  - '- `tools/cli/generators/`'
+  - '- `docs/architecture/context-maps.md`'
+  - '- `docs/contracts/`'
+- filename: ubiquitous-language.md
+  path: docs/requirements/ubiquitous-language.md
+  title: Ubiquitous Language
+  headings:
+  - '## 1. Core Domain Terms'
+  - '## 2. Event-Driven Terms'
+  - '## 3. User Roles'
+  - '## 4. Data & Model Concepts'
+  - '## 5. Marketplace & Extensibility'
+  - '## 6. Access Control & Identity'
+  - '## 7. Lifecycle Terminology'
+  - '## 8. Platform & Operations'
+  - '## 9. Cross-Domain Language (Shared Kernel)'
+  - '## References'
+  content:
+  - ''
+  - This document defines the core vocabulary used throughout the Applied Innovation
+    Corporation (AIC) AI Platform, across domains, code, documentation, and conversations.
+    This shared language ensures alignment between business, product, and engineering.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Term                     | Definition |'
+  - '|--------------------------|------------|'
+  - '| **Engagement**           | A consulting project or client-specific AI enablement
+    initiative. |'
+  - '| **Workspace**            | A client-specific sandboxed environment within the
+    AI PaaS. |'
+  - '| **Tenant**               | A company or organization using the platform as
+    a client. |'
+  - '| **Portal**               | A specific interface (e.g., Admin Portal, Developer
+    Portal) tailored to a user role. |'
+  - '| **App**                  | A client- or vendor-deployed integration, extension,
+    or packaged AI module. |'
+  - '| **Template**             | A reusable AI model or workflow blueprint that clients
+    can instantiate. |'
+  - '| **Assessment**           | An evaluation tool or checklist used by consultants
+    to guide clients. |'
+  - '| **Transformation Plan** | A roadmap or strategy tailored for client AI adoption.
+    |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Term                  | Definition |'
+  - '|-----------------------|------------|'
+  - '| **Domain Event**      | An immutable fact about something that happened within
+    a bounded context (e.g., `UserRegistered`, `ModelCreated`). |'
+  - '| **Command**           | A directive to perform an action (e.g., `CreateWorkspace`,
+    `GenerateInvoice`). |'
+  - '| **Query**             | A read-only request for information (e.g., `GetTenantUsageStats`).
+    |'
+  - '| **Saga**              | A long-running, coordinated business transaction across
+    services. |'
+  - '| **Policy**            | A rule that listens for events and may trigger actions
+    or commands. |'
+  - '| **Projection**        | A derived read model built by consuming events. |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Role           | Description |'
+  - '|----------------|-------------|'
+  - '| **Admin**      | Oversees all tenants, configurations, and system-wide settings.
+    |'
+  - '| **Consultant** | Delivers AI enablement services and manages client engagements.
+    |'
+  - '| **Client User**| Uses the platform on behalf of a tenant. May create workspaces,
+    run models, view results. |'
+  - '| **Developer**  | Builds apps, APIs, or integrations for use within the platform.
+    |'
+  - '| **Vendor**     | Provides marketplace-ready extensions and third-party solutions.
+    |'
+  - '| **Support**    | Responds to tickets and manages support knowledge base. |'
+  - '| **Investor**   | Has restricted access to dashboards and financial reports.
+    |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Term              | Definition |'
+  - '|-------------------|------------|'
+  - '| **Model**         | A trained AI model that can be executed in a client workspace.
+    |'
+  - '| **Model Execution**| The act of running a model with input data, producing
+    an output. |'
+  - '| **Input Template** | A predefined schema guiding what data is required for
+    model execution. |'
+  - "| **Output Artifact**| A result produced by the platform \u2014 document, chart,\
+    \ recommendation, etc. |"
+  - '| **Dataset**       | A collection of structured or unstructured data used for
+    training or inference. |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Term              | Definition |'
+  - '|-------------------|------------|'
+  - '| **Marketplace**   | A catalog of AI apps, templates, datasets, and vendor-provided
+    tools. |'
+  - '| **Extension**     | A plug-in to enhance or augment existing platform features.
+    |'
+  - '| **Integration**   | A connector or workflow with external systems (e.g., Salesforce,
+    Databricks). |'
+  - '| **Connector**     | A data pipeline or sync adapter that brings data into the
+    platform. |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Term            | Definition |'
+  - '|-----------------|------------|'
+  - '| **API Key**     | Credential used to authenticate programmatic access. |'
+  - '| **Session**     | A logged-in state for a user tied to a specific tenant and
+    role. |'
+  - '| **Permission**  | A granular action-level capability assigned to a role (e.g.,
+    `can_view_model`). |'
+  - '| **Role**        | A bundle of permissions assigned to a user. |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Term              | Definition |'
+  - '|-------------------|------------|'
+  - '| **Onboarding**     | The initial setup process for new tenants, users, or developers.
+    |'
+  - '| **Provisioning**   | Allocating resources for a tenant, app, or workspace.
+    |'
+  - '| **Deactivation**   | Removing access or disabling an entity without deletion.
+    |'
+  - '| **Audit Log**      | An immutable log of sensitive or significant system activities.
+    |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '| Term              | Definition |'
+  - '|-------------------|------------|'
+  - '| **CLI Tooling**   | Developer-focused automation tools provided via terminal
+    commands. |'
+  - '| **Sandbox**       | An isolated, safe environment for testing APIs and app
+    behavior. |'
+  - '| **Telemetry**     | Logs, metrics, and traces emitted by services for observability.
+    |'
+  - '| **Secrets**       | Confidential credentials or configuration values encrypted
+    at rest. |'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- **Event**: A named business fact.'
+  - '- **Service**: A boundary around a subdomain (e.g., `billing`, `support`, `auth`).'
+  - '- **Aggregate**: A transactional consistency boundary around domain entities.'
+  - '- **Value Object**: An immutable object that expresses a concept (e.g., `Email`,
+    `Price`).'
+  - '- **Policy**: A reactive rule listening for events and enforcing invariants or
+    coordination.'
+  - '- **Read Model**: A materialized view created from events for querying purposes.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- `docs/architecture/bounded-contexts.md`'
+  - '- `docs/architecture/events.md`'
+  - '- `docs/requirements/software-requirements-document.md`'
+- filename: sagas.md
+  path: docs/requirements/sagas.md
+  title: Saga Patterns for Distributed Workflows
+  headings:
+  - '## 1. What Is a Saga?'
+  - '## 2. When to Use Sagas'
+  - '## 3. Saga Patterns'
+  - '### 3.1 Choreography (Decentralized)'
+  content:
+  - ''
+  - This document outlines the use of **sagas** in the AIC AI Platform architecture.
+    Sagas manage distributed, long-running business transactions across multiple services,
+    ensuring eventual consistency through orchestration or choreography.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - A **saga** is a sequence of local transactions. Each transaction updates data
+    within a single service and publishes an event to trigger the next transaction.
+    If a step fails, the saga executes compensating transactions to undo the previous
+    steps.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - 'Sagas are appropriate when:'
+  - ''
+  - '- Business processes span multiple services (e.g., onboarding a new client).'
+  - '- Consistency must be maintained across services asynchronously.'
+  - '- Operations need rollback or compensation on failure.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - ''
+  - Each service listens for specific events and reacts accordingly.
+  - ''
+  - '**Pros**:'
+  - '- Loosely coupled'
+  - '- Simple to implement for simple flows'
+  - ''
+  - '**Cons**:'
+  - '- Harder to track/debug'
+  - '- Risk of unexpected coupling over time'
+  - ''
+  - '**Example**:'
+  - ''
+  - '```plaintext'
+  - ClientOnboarded
+  - "\u2192 Creates Workspace (ai-workspace)"
+  - "\u2192 Sets Up Billing Profile (billing)"
+  - "\u2192 Sends Welcome Notification (notifications)"
+  - ''
+  - ''
+  - Each service listens to events and reacts without a central coordinator.
+  - 3.2 Orchestration (Centralized)
+  - ''
+  - A central saga orchestrator controls the flow and sends commands to participating
+    services.
+  - ''
+  - 'Pros:'
+  - ''
+  - Explicit control
+  - ''
+  - Easier to test, monitor, and visualize
+  - ''
+  - 'Cons:'
+  - ''
+  - More tightly coupled
+  - ''
+  - Additional service to maintain
+  - ''
+  - 'Example:'
+  - ''
+  - 'Saga Orchestrator: OnboardClientSaga'
+  - "\u2192 [Command] CreateWorkspace"
+  - "\u2190 [Event] WorkspaceCreated"
+  - "\u2192 [Command] SetupBilling"
+  - "\u2190 [Event] BillingProfileCreated"
+  - "\u2192 [Command] SendWelcomeEmail"
+  - ''
+  - 4. Saga Lifecycle
+  - ''
+  - 'Triggering Event: A domain event (e.g., ClientOnboarded) starts the saga.'
+  - ''
+  - 'Orchestration: Commands are dispatched sequentially or in parallel.'
+  - ''
+  - 'Intermediate Events: Each command may emit events confirming success or failure.'
+  - ''
+  - 'Compensation (optional): In case of failure, the saga initiates undo steps (e.g.,
+    RevertBilling).'
+  - ''
+  - 'Completion: The saga ends in either a COMPLETED or FAILED state.'
+  - ''
+  - '5. Saga Example: Client Onboarding'
+  - 'Trigger:'
+  - ''
+  - ClientOnboarded (event from clients service)
+  - ''
+  - 'Steps:'
+  - Step  Command Handler Service Success Event Failure Compensation
+  - 1 CreateWorkspace ai-workspace  WorkspaceCreated  DeleteTenant
+  - 2 SetupBilling  billing BillingProfileCreated DeleteWorkspace
+  - 3 SendWelcomeEmail  notifications NotificationSent  N/A
+  - 6. Saga Implementation Notes
+  - ''
+  - Sagas are stored in the services/<domain>/application/sagas/ folder.
+  - ''
+  - Use persistent state if saga spans time (e.g., DB or event store).
+  - ''
+  - Retry policy and idempotency must be enforced in each handler.
+  - ''
+  - CLI can scaffold new saga templates.
+  - ''
+  - 7. Sample Saga Skeleton
+  - ''
+  - // services/clients/application/sagas/OnboardClientSaga.ts
+  - import { Saga, SagaStep } from '@aic/core/saga';
+  - import { CreateWorkspace, SetupBilling, SendWelcomeEmail } from '../commands';
+  - ''
+  - export class OnboardClientSaga extends Saga {
+  - 'steps: SagaStep[] = ['
+  - '{'
+  - 'command: new CreateWorkspace(),'
+  - 'onSuccess: ''WorkspaceCreated'','
+  - 'onFailure: ''RevertTenant'','
+  - '},'
+  - '{'
+  - 'command: new SetupBilling(),'
+  - 'onSuccess: ''BillingProfileCreated'','
+  - 'onFailure: ''DeleteWorkspace'','
+  - '},'
+  - '{'
+  - 'command: new SendWelcomeEmail(),'
+  - 'onSuccess: ''NotificationSent'','
+  - '}'
+  - '];'
+  - '}'
+  - ''
+  - 8. Monitoring & Observability
+  - ''
+  - All sagas should emit SagaStarted, SagaStepCompleted, SagaFailed, and SagaCompleted
+    events.
+  - ''
+  - These can be used to drive dashboards and alerts.
+  - ''
+  - 9. CLI Support
+  - ''
+  - 'Use the CLI to scaffold sagas:'
+  - ''
+  - pnpm scaffold saga OnboardClientSaga --service clients
+  - ''
+  - 10. References
+  - ''
+  - docs/architecture/events.md
+  - ''
+  - docs/architecture/context-maps.md
+  - ''
+  - packages/domain-events/clients/ClientOnboarded.ts
+  - ''
+  - services/<domain>/application/sagas/
+- filename: coding-guidelines.md
+  path: docs/requirements/coding-guidelines.md
+  title: AIC AI Platform Coding Guidelines
+  headings:
+  - '## 1. General Principles'
+  - '## 2. Project Structure'
+  - '## 3. TypeScript'
+  content:
+  - ''
+  - These guidelines define conventions and best practices to maintain code quality,
+    consistency, and scalability across the AIC AI Platform monorepo.
+  - ''
+  - '---'
+  - ''
+  - ''
+  - "- \u2733\uFE0F Prefer **readability over cleverness**."
+  - "- \U0001F50D Code should be **self-documenting**; use comments only when necessary."
+  - "- \u2696\uFE0F Adhere to **single responsibility principle** in all components."
+  - "- \U0001F9E9 Use **modular**, composable building blocks."
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Follow the platform''s **Clean Architecture + DDD** folder conventions:'
+  - '- `application/`, `domain/`, `infrastructure/`, `interfaces/`'
+  - '- Maintain `README.md` inside each app, service, and package directory.'
+  - '- Place reusable logic in `packages/`.'
+  - ''
+  - '---'
+  - ''
+  - ''
+  - '- Use `strict` mode in `tsconfig.json`.'
+  - '- Prefer `type` over `interface` unless extension is required.'
+  - '- Use Zod for runtime validation.'
+  - "- Avoid `any` \u2014 use `unknown` with guards if unsure."
+  - ''
+  - '```ts'
+  - "// \u274C Avoid"
+  - 'const user: any = getUser();'
+  - ''
+  - "// \u2705 Use"
+  - 'const user: unknown = getUser();'
+  - if (isUser(user)) {
+  - '...'
+  - '}'
+  - ''
+  - ''
+  - 4. Domain-Driven Code
+  - ''
+  - 'Each domain must define:'
+  - ''
+  - Aggregates
+  - ''
+  - Value Objects
+  - ''
+  - Domain Events
+  - ''
+  - Domain Services (if needed)
+  - ''
+  - 'Domain code is framework-agnostic and resides in:'
+  - ''
+  - services/<domain>/domain/
+  - ''
+  - Avoid database, HTTP, or logging code inside domain/.
+  - ''
+  - 5. Application Layer
+  - ''
+  - 'Use CQRS pattern:'
+  - ''
+  - commands/ = mutations
+  - ''
+  - queries/ = reads
+  - ''
+  - Commands and queries are orchestrated via handlers.
+  - ''
+  - Sagas go in application/sagas/.
+  - ''
+  - 6. Event-Driven Patterns
+  - ''
+  - Use domain-events package to publish and subscribe to events.
+  - ''
+  - 'Events must export:'
+  - ''
+  - EVENT_NAME constant
+  - ''
+  - EventSchema via Zod
+  - ''
+  - EventType TypeScript type
+  - ''
+  - export const ModelCreated = 'model.created';
+  - export const ModelCreatedSchema = z.object({
+  - 'modelId: z.string(),'
+  - 'tenantId: z.string()'
+  - '});'
+  - export type ModelCreatedType = z.infer<typeof ModelCreatedSchema>;
+  - ''
+  - 7. API & Interfaces
+  - ''
+  - REST or GraphQL live in interfaces/.
+  - ''
+  - REST = /interfaces/api/, GraphQL = /interfaces/graphql/
+  - ''
+  - Use OpenAPI schemas via codegen package.
+  - ''
+  - 8. Testing Guidelines
+  - ''
+  - Unit tests live in tests/unit/
+  - ''
+  - Integration tests live in tests/integration/
+  - ''
+  - Use vitest or jest (defined in shared config/jest/)
+  - ''
+  - Mock external dependencies.
+  - ''
+  - describe('AuthService', () => {
+  - it('generates a token', () => {
+  - '...'
+  - '});'
+  - '});'
+  - ''
+  - 9. Code Style
+  - ''
+  - 'Enforced via:'
+  - ''
+  - ESLint (config/eslint/)
+  - ''
+  - Prettier (config/prettier/)
+  - ''
+  - Commitlint (commitlint.config.js)
+  - ''
+  - Run formatters and linters via Makefile.
+  - ''
+  - make lint
+  - make format
+  - ''
+  - 10. Commit Conventions
+  - ''
+  - 'Use Conventional Commits:'
+  - ''
+  - 'feat: add onboarding saga'
+  - 'fix: patch client auth bug'
+  - 'chore: update README'
+  - ''
+  - Commits are validated via Husky and Commitlint.
+  - ''
+  - 11. Versioning
+  - ''
+  - 'Use Changesets for version tracking:'
+  - ''
+  - Add .changeset/*.md files on PRs
+  - ''
+  - 'CLI: pnpm changeset'
+  - ''
+  - 12. CLI Usage
+  - ''
+  - 'Scaffold apps, services, and packages using:'
+  - ''
+  - pnpm scaffold app marketing-site
+  - pnpm scaffold service notifications
+  - pnpm scaffold event ModelCreated --domain model
+  - ''
+  - 13. Review & PR Process
+  - ''
+  - 'Pull Requests require:'
+  - ''
+  - Passing CI
+  - ''
+  - Code coverage above threshold
+  - ''
+  - Two approvals if high-impact
+  - ''
+  - Include a description and link to relevant issues or ADRs.
+  - ''
+  - 14. Documentation
+  - ''
+  - 'Keep docs up to date in:'
+  - ''
+  - docs/
+  - ''
+  - README.md per app/service/package
+  - ''
+  - Use markdown linting to enforce consistency.
+  - ''
+  - 15. Anti-Patterns to Avoid
+  - Anti-Pattern  Recommended Alternative
+  - Fat Services  Use domain/services/ + application/commands/
+  - Anemic Domain Move logic from controllers into domain layer
+  - any or loose types  Use Zod + strict TypeScript
+  - Mixed concerns  Separate by domain/, infrastructure/, interfaces/
+  - 16. Future Enhancements
+  - ''
+  - Static analysis for bounded context violations
+  - ''
+  - Codemods for automated refactoring
+  - ''
+  - Visual tooling for context maps and event flows
+  - ''
+  - Adhering to these guidelines ensures long-term maintainability, scalability, and
+    onboarding ease for new engineers and contributors.
+- filename: template.md
+  path: docs/architecture/adr/template.md
+  title: null
+  headings: []
+  content: []
+- filename: 0001-initial-architecture.md
+  path: docs/architecture/adr/0001-initial-architecture.md
+  title: null
+  headings: []
+  content: []

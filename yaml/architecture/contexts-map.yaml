@@ -1,0 +1,46 @@
+filename: contexts-map.md
+path: docs/architecture/contexts-map.md
+title: Context Map
+headings:
+- '## Upstream / Downstream Relationships'
+- '## Shared Kernel Agreements'
+- '## Anti-Corruption Layers (ACLs)'
+- '## Conformist Relationships'
+content:
+- ''
+- ''
+- Clients is downstream of Auth and Tenancy.
+- AI Workspace is downstream of Clients, Templates, and Billing.
+- Billing is upstream of Notifications and Investor.
+- Engagements is downstream of Clients, Enablement, and Projects.
+- Devtools is downstream of Auth and Clients.
+- Support is downstream of Clients, Engagements, and Billing.
+- Marketplace is downstream of Tenancy and Vendor definitions.
+- ''
+- ''
+- ''
+- Auth and Tenancy share kernel definitions for user identity, session, and tenant
+  resolution.
+- Clients and Billing share kernel on ClientAccount, SubscriptionPlan, and billing
+  identifiers.
+- Templates and AI Workspace share kernel on PromptTemplate, ModelTemplate, and validation
+  schemas.
+- Devtools and AI Workspace share kernel on API access keys, scopes, and audit logs.
+- ''
+- ''
+- ''
+- AI Workspace uses an ACL for integrating with Templates to transform legacy templates
+  into updated prompt DSLs.
+- Investor uses an ACL to read Billing and Projects KPIs in aggregate form.
+- Support uses an ACL for Engagements and Clients to surface limited context for ticket
+  resolution.
+- ''
+- ''
+- ''
+- Notifications conforms to the data model provided by upstream event emitters (e.g.,
+  InvoiceGenerated, ModelExecutionCompleted).
+- Enablement conforms to the formats and metadata provided by Templates.
+- Marketing Site conforms to Marketplace schemas for rendering vendor/integration
+  data.
+- This context map supports a service-oriented architecture with clear bounded context
+  ownership and integration contracts.

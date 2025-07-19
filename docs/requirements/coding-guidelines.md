@@ -1,0 +1,193 @@
+# AIC AI Platform Coding Guidelines
+
+These guidelines define conventions and best practices to maintain code quality, consistency, and scalability across the AIC AI Platform monorepo.
+
+---
+
+## 1. General Principles
+
+- ✳️ Prefer **readability over cleverness**.
+- 🔍 Code should be **self-documenting**; use comments only when necessary.
+- ⚖️ Adhere to **single responsibility principle** in all components.
+- 🧩 Use **modular**, composable building blocks.
+
+---
+
+## 2. Project Structure
+
+- Follow the platform's **Clean Architecture + DDD** folder conventions:
+  - `application/`, `domain/`, `infrastructure/`, `interfaces/`
+- Maintain `README.md` inside each app, service, and package directory.
+- Place reusable logic in `packages/`.
+
+---
+
+## 3. TypeScript
+
+- Use `strict` mode in `tsconfig.json`.
+- Prefer `type` over `interface` unless extension is required.
+- Use Zod for runtime validation.
+- Avoid `any` — use `unknown` with guards if unsure.
+
+```ts
+// ❌ Avoid
+const user: any = getUser();
+
+// ✅ Use
+const user: unknown = getUser();
+if (isUser(user)) {
+  ...
+}
+
+
+4. Domain-Driven Code
+
+    Each domain must define:
+
+        Aggregates
+
+        Value Objects
+
+        Domain Events
+
+        Domain Services (if needed)
+
+    Domain code is framework-agnostic and resides in:
+
+    services/<domain>/domain/
+
+    Avoid database, HTTP, or logging code inside domain/.
+
+5. Application Layer
+
+    Use CQRS pattern:
+
+        commands/ = mutations
+
+        queries/ = reads
+
+    Commands and queries are orchestrated via handlers.
+
+    Sagas go in application/sagas/.
+
+6. Event-Driven Patterns
+
+    Use domain-events package to publish and subscribe to events.
+
+    Events must export:
+
+        EVENT_NAME constant
+
+        EventSchema via Zod
+
+        EventType TypeScript type
+
+export const ModelCreated = 'model.created';
+export const ModelCreatedSchema = z.object({
+  modelId: z.string(),
+  tenantId: z.string()
+});
+export type ModelCreatedType = z.infer<typeof ModelCreatedSchema>;
+
+7. API & Interfaces
+
+    REST or GraphQL live in interfaces/.
+
+    REST = /interfaces/api/, GraphQL = /interfaces/graphql/
+
+    Use OpenAPI schemas via codegen package.
+
+8. Testing Guidelines
+
+    Unit tests live in tests/unit/
+
+    Integration tests live in tests/integration/
+
+    Use vitest or jest (defined in shared config/jest/)
+
+    Mock external dependencies.
+
+describe('AuthService', () => {
+  it('generates a token', () => {
+    ...
+  });
+});
+
+9. Code Style
+
+    Enforced via:
+
+        ESLint (config/eslint/)
+
+        Prettier (config/prettier/)
+
+        Commitlint (commitlint.config.js)
+
+    Run formatters and linters via Makefile.
+
+make lint
+make format
+
+10. Commit Conventions
+
+    Use Conventional Commits:
+
+feat: add onboarding saga
+fix: patch client auth bug
+chore: update README
+
+    Commits are validated via Husky and Commitlint.
+
+11. Versioning
+
+    Use Changesets for version tracking:
+
+        Add .changeset/*.md files on PRs
+
+        CLI: pnpm changeset
+
+12. CLI Usage
+
+    Scaffold apps, services, and packages using:
+
+pnpm scaffold app marketing-site
+pnpm scaffold service notifications
+pnpm scaffold event ModelCreated --domain model
+
+13. Review & PR Process
+
+    Pull Requests require:
+
+        Passing CI
+
+        Code coverage above threshold
+
+        Two approvals if high-impact
+
+    Include a description and link to relevant issues or ADRs.
+
+14. Documentation
+
+    Keep docs up to date in:
+
+        docs/
+
+        README.md per app/service/package
+
+    Use markdown linting to enforce consistency.
+
+15. Anti-Patterns to Avoid
+Anti-Pattern  Recommended Alternative
+Fat Services  Use domain/services/ + application/commands/
+Anemic Domain Move logic from controllers into domain layer
+any or loose types  Use Zod + strict TypeScript
+Mixed concerns  Separate by domain/, infrastructure/, interfaces/
+16. Future Enhancements
+
+    Static analysis for bounded context violations
+
+    Codemods for automated refactoring
+
+    Visual tooling for context maps and event flows
+
+    Adhering to these guidelines ensures long-term maintainability, scalability, and onboarding ease for new engineers and contributors.

@@ -1,0 +1,33 @@
+filename: bounded-contexts.md
+path: docs/architecture/bounded-contexts.md
+title: null
+headings: []
+content:
+- Bounded Contexts
+- ''
+- A Bounded Context defines the explicit boundaries within which
+- a particular domain model is defined and applicable. Each service
+- owns its model, logic, and data. Coordination between contexts
+- happens through domain events, APIs, or message brokers.
+- ''
+- Core Contexts
+- ''
+- "Context\t\t\tDescription"
+- ''
+- "Auth\t\t\tIdentity, user accounts, permissions, and authentication flows."
+- "Clients\t\t\tClient company and user management, onboarding, provisioning."
+- "AI Workspace\t\tManagement and execution of AI projects, models, datasets, and\
+  \ runs."
+- "Billing\t\t\tSubscriptions, payments, invoicing, and usage metering."
+- "Templates\t\tReusable prompt, project, and model templates."
+- "Projects\t\tEnd-to-end tracking of client transformation projects and deliverables."
+- "Engagements\t\tScoped consulting engagements, deliverables, approvals, and lifecycle."
+- "Enablement\t\tEnablement resources, documentation, training plans."
+- "Notifications\t\tMessaging, alerts, and in-app/email notifications."
+- "Devtools\t\tAPI tokens, webhook configuration, sandbox logs, and telemetry."
+- "Support\t\t\tHelpdesk, ticketing, chat, and knowledge base."
+- "Marketplace\t\tVendor extensions, app submissions, integration listings."
+- "Investor\t\tAccess to reports, KPIs, VDR, financials for shareholders."
+- "Tenancy\t\t\tTenant isolation, account contexts, workspaces, subdomains."
+- "IP Assets\t\tStorage and lifecycle of client-specific and platform intellectual\
+  \ property."
